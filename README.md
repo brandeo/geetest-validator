@@ -1,5 +1,37 @@
 # geetest-manual-validator
 极验手动验证服务器
+## 安装（二选其一）
+
+```
+git clone --depth=1 https://gitee.com/ikenxuan/geetest-validator.git
+
+```
+```
+# 安装依赖 npm 、pnpm 或 yarn
+npm install
+```
+
+## 使用
+```
+# 前台启动
+node app
+```
+```
+# 后台启动
+npm run start
+```
+```
+# 后台注销
+npm run stop
+```
+
+```
+# 输出日志
+npm run log
+```
+默认监听 `0.0.0.0`:3001
+
+服务器开放端口即可对外访问
 
 ## 接口
 ```
