@@ -1,7 +1,6 @@
 # geetest-manual-validator
 极验手动验证服务器
-## 安装（二选其一）
-
+## 安装
 ```
 git clone --depth=1 https://gitee.com/ikenxuan/geetest-validator.git
 
