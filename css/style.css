@@ -13,13 +13,27 @@ a {
 }
 
 .box {
-    margin: 100px auto;
-    padding: 20px 30px 25px 30px;
+    position: relative;
+    margin: 200px auto;
+    padding: 30px 40px 35px 40px;
     max-width: 400px;
-    border-radius: 15px;
-    background: #fff;
-    border: 2px solid #90b5e2;
+    border-radius: 30px;
+    background: #fffffff3;
 }
+.box::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    top: -200px;
+    right: -200px;
+    bottom: -200px;
+    left: -200px;
+    border-radius: 30px;
+    background: 
+    radial-gradient(circle at center, rgba(114, 177, 255, 0.417), transparent 60%);
+  }
+
+
 
 .title {
     text-align: center;
@@ -73,22 +87,22 @@ a {
     padding: 7px 12px;
     font-size: 14px;
     font-weight: 400;
-    line-height: 20px;
+    line-height: 1px;
     color: inherit;
     background-clip: padding-box;
     border: 1px solid #e6e7e9;
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    border-radius: 4px;
+    border-radius: 10px;
     transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
 
 .form-control:focus {
     color: inherit;
-    border-color: #90b5e2;
+    border-color: #157eff;
     outline: 0;
-    box-shadow: 0 0 0 4px rgb(32 107 196 / 25%);
+    box-shadow: none;
 }
 .form-control:disabled {
     background-color: #f1f5f9;
@@ -108,12 +122,12 @@ a {
     cursor: pointer;
     user-select: none;
 
-    width: 336px;
+    width: 320px;
     height: 42px;
     color: #f8fafc;
-    background-color: #3873ff;
+    background-color: #3471fff8;
     text-align: center;
-    border-radius: 4px;
+    border-radius: 15px;
     box-shadow: 0 1px 0 rgba(29, 39, 59, 0.04), inset 0 -1px 0 rgba(29, 39, 59, 0.2);
 }
 
@@ -130,10 +144,10 @@ a {
 
 #wait {
     height: 42px;
-    width: 336px;
+    width: 320px;
     text-align: center;
-    border-radius: 4px;
-    background-color: #F3F3F3;
+    border-radius: 15px;
+    background-color: #0000000a;
 }
 
 .hide {
@@ -152,7 +166,7 @@ a {
     height: 8px;
     margin: 18px 4px;
     background: #ccc;
-    border-radius: 50%;
+    border-radius: 15px;
     opacity: 0;
     box-shadow: 0 0 2px black;
     animation: loadingFade 1s infinite;
@@ -173,6 +187,16 @@ a {
 .loading-dot:nth-child(4) {
     animation-delay: 0.3s;
 }
+.loading-dot:nth-child(5) {
+    animation-delay: 0.4s;
+}
+.loading-dot:nth-child(6) {
+    animation-delay: 0.5s;
+}
+.loading-dot:nth-child(7) {
+    animation-delay: 0.6s;
+}
+
 
 @keyframes loadingFade {
     0% {
