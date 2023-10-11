@@ -47,7 +47,6 @@ server.get('/geetest', (request, reply) => {
             "info": "服务器支持POST和GET请求，传入gt和challenge值即可生成，把challenge值传入callback字段可进行结果查询",
             "data": {
                 "geetest_gt": gt,
-                "source_challenge": null,
                 "geetest_challenge": null,
                 "geetest_seccode": null
             },
