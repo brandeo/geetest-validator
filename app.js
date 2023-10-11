@@ -115,8 +115,9 @@ server.get('/geetest', (request, reply) => {
         .send(content);
 });
 
-server.post('/geetest', (req, reply) => {
-    const requesBody = JSON.parse(req.body)
+let targetUrl
+server.post('/geetest', (request, reply) => {
+    const requesBody = JSON.parse(request.body)
     targetUrl = requesBody.url
     const token = getRandomString(4)
     reply.send({

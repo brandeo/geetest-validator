@@ -43,7 +43,7 @@ window.onload = function () {
                         const challenge = challengeInput.value;
                         const seccode = seccodeInput.value;
                         const validate = validateInput.value
-                        const serverUrl = 'http://localhost:3000';
+                        const serverUrl = 'http://localhost:3001';
                         // 调用接口发送参数
                         fetch(`${serverUrl}/updateResult`, {
                             method: 'POST',
