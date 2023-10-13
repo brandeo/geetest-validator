@@ -4,6 +4,7 @@ import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import fs from 'fs'
 import path from 'path'
+import ejs from 'ejs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -33,7 +34,7 @@ server.get('/geetest', (request, reply) => {
     const { gt, challenge, callback, e } = request.query
 
     /** 读取html */
-    let content = fs.readFileSync('index.html', 'utf8')
+    let content = fs.readFileSync('html/index.html', 'utf8')
     /** 填入参数 */
     if (gt) {
         content = content.replace('id="gt"', `id="gt" value="${gt}"`)
@@ -66,7 +67,7 @@ server.get('/geetest', (request, reply) => {
             reply.type('application/json').send(content);
 
         } catch (err) {
-            reply.code(404).send({ error: 'Not found' });
+            reply.code(404).send({ error: '未生成对应文件，请等待用户访问验证地址' });
         }
     }
 
@@ -75,53 +76,23 @@ server.get('/geetest', (request, reply) => {
         const token = request.query.e;
         const valid = verifyToken(token);
         if (valid) {
-            //构建HTML响应
-            const popupHTML = `
-            <!DOCTYPE html>
-            <html>
-            <head>
-              <style>
-                .button {
-                  display: inline-block;
-                  padding: 10px 20px;
-                  background: #007bff; 
-                  color: #fff;
-                  text-decoration: none;
-                  border-radius: 4px;
-                  
-                  /* 新增代码开始 */
-                  position: absolute;
-                  top: 50%;
-                  left: 50%;
-                  transform: translate(-50%, -50%);
-                  /* 新增代码结束 */
-                }
-                
-                .button:hover {
-                  background: #0062cc; 
-                }
-              </style>
-            </head>
-            
-            <body>
-            
-              <a href='${targetUrl}' class="button">
-                点击前往验证
-              </a>
-            
-            </body>
-            </html>
-            `
+            // 读取HTML模板文件
+            const template = fs.readFileSync('html/jump.ejs', 'utf8');
+
+            // 使用EJS将targetUrl传递到HTML模板中
+            const popupHTML = ejs.render(template, { targetUrl });
+
             reply
                 .code(200)
                 .type('text/html')
                 .send(popupHTML)
         } else {
             // Token验证失败的响应
-            reply.code(403).send({
-                code: 403,
-                message: 'Token不存在或已过期'
-            }, null, 2)
+            const html = fs.readFileSync('html/old_token.html', 'utf8')
+            reply
+            .code(403)
+            .type('text/html')
+            .send(html)
         }
 
     }
@@ -220,7 +191,7 @@ function verifyToken(token) {
     const now = Date.now()
     const tokenData = tokenMap[token]
 
-    if (!tokenData || now - tokenData.createTime > 120 * 1000) {
+    if (!tokenData || now - tokenData.createTime > 240 * 1000) {
         return false; //不存在则无效
     }
 
