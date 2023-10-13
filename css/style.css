@@ -14,18 +14,19 @@ a {
 
 .box {
     position: relative;
-    margin: 200px auto;
+    margin: 100px auto;
     padding: 30px 40px 35px 40px;
     max-width: 400px;
     border-radius: 30px;
     background: #fffffff3;
+    
 }
 .box::before {
     content: '';
     position: absolute;
     z-index: -1;
     top: -200px;
-    right: -200px;
+    right: -176px;
     bottom: -200px;
     left: -200px;
     border-radius: 30px;
@@ -71,7 +72,7 @@ a {
 
 
 .form {
-    margin-bottom: 16px;
+    margin-bottom: 20px;
 }
 
 .form-label {
@@ -87,14 +88,14 @@ a {
     padding: 7px 12px;
     font-size: 14px;
     font-weight: 400;
-    line-height: 1px;
+    line-height: 15px;
     color: inherit;
     background-clip: padding-box;
     border: 1px solid #e6e7e9;
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    border-radius: 10px;
+    border-radius:10px;
     transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
 
@@ -110,7 +111,7 @@ a {
 }
 
 #captcha {
-    width: 336px;
+    width: 320px;
     display: inline-block;
 }
 
@@ -213,3 +214,7 @@ a {
 .geetest_radar_btn {
     border-radius: 4px !important;
 }
+
+.btn-spacer {
+    margin-top: 10px;
+  }
