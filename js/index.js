@@ -5,7 +5,6 @@ window.onload = function () {
     const resultBox = document.querySelector("#result")
     const resultBtn = document.querySelector("#result-btn")
     const toastBox = document.querySelector(".toast-box")
-    const testBtn = document.querySelector("#online-test")
 
     const gtInput = document.querySelector("#gt")
     const challengeInput = document.querySelector("#challenge")
@@ -62,7 +61,7 @@ window.onload = function () {
                         console.log(err)
                     }
 
-                    showToastBox(String("验证成功！你现在可以关闭这个页面了"));
+                    showToastBox("验证成功！你现在可以关闭这个页面了");
                     if (now) {
                         hide(wait);
                         show(successBtn);
@@ -78,24 +77,6 @@ window.onload = function () {
             });
         }
     }
-
-    testBtn.onclick = () => {
-        const randomNum = generateRandomNumber();
-        const baseUrl = "https://www.geetest.com/demo/gt/register-icon";
-        const url = `${baseUrl}?t=${randomNum}`;
-        fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                const challenge = data.challenge;
-                const gt = data.gt;
-                console.log("challenge:", challenge);
-                console.log("gt:", gt);
-                window.location.href = `index.html?gt=${gt}&challenge=${challenge}`;
-            })
-            .catch(error => {
-                console.error("获取gt和challenge失败", error);
-            });
-    };
 
     genBtn.onclick = () => {
         let gt = gtInput.value;
@@ -187,11 +168,4 @@ window.onload = function () {
     function show(el) {
         el.classList.remove("hide")
     }
-
-    function generateRandomNumber() {
-        const timestamp = Date.now().toString();
-        const randomDigits = Math.floor(Math.random() * 10000000000);
-        return timestamp + randomDigits.toString().padStart(11, '0');
-    }
-
 }
