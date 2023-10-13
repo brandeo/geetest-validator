@@ -77,23 +77,40 @@ server.get('/geetest', (request, reply) => {
         if (valid) {
             //构建HTML响应
             const popupHTML = `
-              <!DOCTYPE html>
-              <html lang="en">
-              <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>转发页面</title>
-              </head>
-              <body>
-                <script>
-                  //弹出浏览器弹窗
-                  alert('请一定要进行验证，不然这个验证码就失效了，需重新获取');
+            <!DOCTYPE html>
+            <html>
+            <head>
+              <style>
+                .button {
+                  display: inline-block;
+                  padding: 10px 20px;
+                  background: #007bff; 
+                  color: #fff;
+                  text-decoration: none;
+                  border-radius: 4px;
                   
-                  //等待用户点击确认后进行重定向
-                  window.location.href = '${targetUrl}';
-                </script>
-              </body>
-              </html>
+                  /* 新增代码开始 */
+                  position: absolute;
+                  top: 50%;
+                  left: 50%;
+                  transform: translate(-50%, -50%);
+                  /* 新增代码结束 */
+                }
+                
+                .button:hover {
+                  background: #0062cc; 
+                }
+              </style>
+            </head>
+            
+            <body>
+            
+              <a href='${targetUrl}' class="button">
+                点击前往验证
+              </a>
+            
+            </body>
+            </html>
             `
             reply
                 .code(200)

@@ -132,12 +132,11 @@ a {
     user-select: none;
 
     width: 320px;
-    height: 42px;
-    color: #f8fafc;
+    height: 45px;
+    color: #f7f7f7;
     background-color: #3471fff8;
     text-align: center;
     border-radius: 15px;
-    box-shadow: 0 1px 0 rgba(29, 39, 59, 0.04), inset 0 -1px 0 rgba(29, 39, 59, 0.2);
 }
 
 .btn:hover {
