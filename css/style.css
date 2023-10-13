@@ -25,7 +25,8 @@ a {
     transform: translateX(-50%);
     padding: 30px 40px 35px 40px;
     max-width: 400px;
-    border-radius: 30px;
+    border-right: 90px;
+    border-radius: 40px;
     background: #ffffff;
     
 }
