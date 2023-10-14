@@ -36,22 +36,35 @@ server.get('/geetest', (request, reply) => {
     /** 读取html */
     let content = fs.readFileSync('html/index.html', 'utf8')
     /** 填入参数 */
-    if (gt) {
-        content = content.replace('id="gt"', `id="gt" value="${gt}"`)
-        getgt = gt
+    if (gt && !challenge) {
+        reply
+        .code(403)
+        .send({
+            retcode: 403,
+            info: "传入参数不完整，缺少 challenge ",
+            data: null
+        });
     }
-    if (challenge) {
+    if (challenge && !gt) {
+        reply
+        .code(403)
+        .send({
+            retcode: 403,
+            info: "传入参数不完整，缺少 gt 。查询请把 challenge 值传入 callback 字段即可查询",
+            data: null
+        });
+    }
+    if (gt && challenge) {
+        content = content.replace('id="gt"', `id="gt" value="${gt}"`)
         content = content.replace('id="challenge"', `id="challenge" value="${challenge}"`);
 
         /** 通过challenge参数保存文件 */
         const data = {
             "retcode": 204,
-            "info": "服务器支持POST和GET请求，传入gt和challenge值即可生成，把challenge值传入callback字段可进行结果查询",
+            "info": "服务器支持POST和GET请求，传入 gt 和 challenge 值即可生成，把 challenge 值传入 callback 字段可进行结果查询",
             "data": {
                 "gt": gt,
-                "challenge": null,
-                "validate": null,
-                "seccode": null
+                "challenge": challenge,
             },
         }
         const fileName = `${challenge}.json`
