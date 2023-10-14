@@ -38,6 +38,7 @@ server.get('/geetest', (request, reply) => {
     /** 填入参数 */
     if (gt) {
         content = content.replace('id="gt"', `id="gt" value="${gt}"`)
+        getgt = gt
     }
     if (challenge) {
         content = content.replace('id="challenge"', `id="challenge" value="${challenge}"`);
@@ -47,9 +48,10 @@ server.get('/geetest', (request, reply) => {
             "retcode": 204,
             "info": "服务器支持POST和GET请求，传入gt和challenge值即可生成，把challenge值传入callback字段可进行结果查询",
             "data": {
-                "geetest_gt": gt,
-                "geetest_challenge": null,
-                "geetest_seccode": null
+                "gt": gt,
+                "challenge": null,
+                "validate": null,
+                "seccode": null
             },
         }
         const fileName = `${challenge}.json`
@@ -124,9 +126,10 @@ server.post('/updateResult', (req, res) => {
 
     // 更新数据
     data.retcode = 200
-    data.data.geetest_challenge = challenge;
-    data.data.geetest_seccode = seccode;
-    data.data.geetest_validate = validate;
+    data.data.challenge = challenge;
+    data.data.validate = validate;
+    data.data.seccode = seccode;
+
 
     console.log(data)
     // 保存文件
