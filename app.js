@@ -61,10 +61,12 @@ server.get('/geetest', (request, reply) => {
         /** 通过challenge参数保存文件 */
         const data = {
             "retcode": 204,
-            "info": "服务器支持POST和GET请求，传入 gt 和 challenge 值即可生成，把 challenge 值传入 callback 字段可进行结果查询",
+            "info": "服务器支持GET请求，传入 gt 和 challenge 值即可还原验证码，把 challenge 值传入 callback 字段可进行结果查询",
             "data": {
-                "gt": gt,
-                "challenge": challenge,
+                "gt": null,
+                "challenge": null,
+                "validate": null,
+                "seccode": null
             },
         }
         const fileName = `${challenge}.json`
@@ -129,7 +131,7 @@ server.post('/geetest', (request, reply) => {
 // 接收 challenge 和 seccode 参数
 // 读取文件 - 更新数据 - 写入文件
 server.post('/updateResult', (req, res) => {
-    const { challenge, validate, seccode } = req.body;
+    const { gt, challenge, validate, seccode } = req.body;
 
     console.log({ challenge, validate, seccode })
     // 读取原文件
@@ -139,6 +141,7 @@ server.post('/updateResult', (req, res) => {
 
     // 更新数据
     data.retcode = 200
+    data.data.gt = gt;
     data.data.challenge = challenge;
     data.data.validate = validate;
     data.data.seccode = seccode;

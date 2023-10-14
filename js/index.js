@@ -40,6 +40,7 @@ window.onload = function () {
                     validateInput.value = result.geetest_validate;
                     seccodeInput.value = result.geetest_seccode;
                     try {
+                        const gt = gtInput.value
                         const challenge = challengeInput.value;
                         const seccode = seccodeInput.value;
                         const validate = validateInput.value
@@ -51,12 +52,18 @@ window.onload = function () {
                                 'Content-Type': 'application/json'
                               },
                             body: JSON.stringify({
+                                gt,
                                 challenge,
                                 validate,
                                 seccode
                             })
                         });
-
+console.log({
+    gt,
+    challenge,
+    validate,
+    seccode
+})
                     } catch (err) {
                         console.log(err)
                     }
