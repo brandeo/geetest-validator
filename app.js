@@ -133,7 +133,6 @@ server.post('/geetest', (request, reply) => {
 server.post('/updateResult', (req, res) => {
     const { gt, challenge, validate, seccode } = req.body;
 
-    console.log({ challenge, validate, seccode })
     // 读取原文件
     const filePath = `./data/${challenge}.json`;
     let data = fs.readFileSync(filePath, 'utf8');
@@ -147,7 +146,6 @@ server.post('/updateResult', (req, res) => {
     data.data.seccode = seccode;
 
 
-    console.log(data)
     // 保存文件
     fs.writeFileSync(filePath, JSON.stringify(data, null, 4));
 

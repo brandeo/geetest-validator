@@ -58,12 +58,6 @@ window.onload = function () {
                                 seccode
                             })
                         });
-console.log({
-    gt,
-    challenge,
-    validate,
-    seccode
-})
                     } catch (err) {
                         console.log(err)
                     }
