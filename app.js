@@ -32,27 +32,29 @@ server.register(fastifyStatic, {
 server.get('/geetest', (request, reply) => {
     //获取query参数
     const { gt, challenge, callback, e } = request.query
+    const accept = request.headers.accept
 
     /** 读取html */
     let content = fs.readFileSync('html/index.html', 'utf8')
+
     /** 填入参数 */
     if (gt && !challenge) {
         reply
-        .code(403)
-        .send({
-            retcode: 403,
-            info: "传入参数不完整，缺少 challenge ",
-            data: null
-        });
+            .code(403)
+            .send({
+                retcode: 403,
+                info: "传入参数不完整，缺少 challenge ",
+                data: null
+            });
     }
     if (challenge && !gt) {
         reply
-        .code(403)
-        .send({
-            retcode: 403,
-            info: "传入参数不完整，缺少 gt 。查询请把 challenge 值传入 callback 字段即可查询",
-            data: null
-        });
+            .code(403)
+            .send({
+                retcode: 403,
+                info: "传入参数不完整，缺少 gt 。查询请把 challenge 值传入 callback 字段即可查询",
+                data: null
+            });
     }
     if (gt && challenge) {
         content = content.replace('id="gt"', `id="gt" value="${gt}"`)
@@ -72,6 +74,15 @@ server.get('/geetest', (request, reply) => {
         const fileName = `${challenge}.json`
         const filePath = path.join(__dirname, 'data', fileName)
         fs.writeFileSync(filePath, JSON.stringify(data, null, 4))
+        if (accept === 'application/json') {
+            reply
+                .type('application/json')
+                .send(fileName)
+        } else {
+            reply
+                .type('text/html')
+                .send(content);
+        }
     }
 
     /** 回调地址 */
@@ -81,10 +92,18 @@ server.get('/geetest', (request, reply) => {
 
         try {
             const content = fs.readFileSync(filePath, 'utf8');
-            reply.type('application/json').send(content);
+            reply
+                .type('application/json')
+                .send(content);
 
         } catch (err) {
-            reply.code(404).send({ error: '未生成对应文件，请等待用户访问验证地址' });
+            reply
+                .type('application/json')
+                .send({
+                    retcode: 204,
+                    info: '未生成对应文件，请等待用户访问验证地址',
+                    data: null
+                });
         }
     }
 
@@ -107,16 +126,14 @@ server.get('/geetest', (request, reply) => {
             // Token验证失败的响应
             const html = fs.readFileSync('html/old_token.html', 'utf8')
             reply
-            .code(403)
-            .type('text/html')
-            .send(html)
+                .code(403)
+                .type('text/html')
+                .send(html)
         }
 
     }
 
-    reply
-        .type('text/html')
-        .send(content);
+
 });
 
 let targetUrl
