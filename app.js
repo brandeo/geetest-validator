@@ -5,7 +5,6 @@ import { dirname, join } from 'path';
 import fs from 'fs'
 import path from 'path'
 import ejs from 'ejs'
-import { request } from 'http';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
