@@ -5,6 +5,7 @@ import { dirname, join } from 'path';
 import fs from 'fs'
 import path from 'path'
 import ejs from 'ejs'
+import { request } from 'http';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -28,6 +29,13 @@ server.register(fastifyStatic, {
     prefix: '/'
 });
 
+server.get('/', (request, reply) => {
+    let content = fs.readFileSync('html/index.html', 'utf8')
+    reply
+    .type('text/html')
+    .send(content);
+
+})
 /** 验证地址 */
 server.get('/geetest', (request, reply) => {
     //获取query参数
@@ -105,6 +113,7 @@ server.get('/geetest', (request, reply) => {
                     data: null
                 });
         }
+
     }
 
     /** 短链转发 */
