@@ -13,12 +13,25 @@ a {
 }
 
 .box {
-    margin: 80px auto;
+    margin-top: 100px;
     padding: 20px 30px 25px 30px;
     max-width: 400px;
-    border-radius: 20px;
-    background: #ffffffa8;
+    border-radius: 30px;
+    background: #ffffff24;
+    position: fixed;
+    backdrop-filter: blur(3px);
 }
+.border-box {
+    width: 500px;
+    height: 210px;
+    padding: 20px;
+    text-align: center;
+    border-radius: 30px;
+    background: #ffffffa8;
+    position: relative;
+    /* 将.border-box设置为相对定位 */
+}
+
 
 .title {
     text-align: center;
@@ -92,11 +105,6 @@ a {
     opacity: 1;
 }
 
-#captcha {
-    width: 340px;
-    display: inline-block;
-}
-
 .btn {
     display: inline-flex;
     align-items: center;
@@ -108,7 +116,7 @@ a {
     width: 340px;
     height: 42px;
     color: #f8fafc;
-    background-color: #3873ff;
+    background-color: #0d0721e7;
     text-align: center;
     border-radius: 8px;
 }
@@ -116,7 +124,7 @@ a {
 .btn:hover {
     color: #f8fafc;
     text-decoration: none;
-    background-color: #437cff;
+    background-color: #070412;
     border-color: transparent;
 }
 #success {

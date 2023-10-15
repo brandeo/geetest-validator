@@ -1,0 +1,37 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #f1f2f4;
+}
+
+a {
+    text-decoration: none;
+}
+
+.box {
+    margin-top: 200px;
+    padding: 20px 30px 90px 30px;
+    max-width: 420px;
+    border-radius: 30px;
+    background: #ffffff24;
+    position: fixed;
+    text-align: center;
+    color: #f1f2f4;
+    backdrop-filter: blur(3px);
+}
+
+.button {
+    display: inline-block;
+    padding: 10px 25px;
+    background: #ffffff24;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 10px;
+    position: absolute;
+    bottom: 20px;
+    right: 15px;
+}

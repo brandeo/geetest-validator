@@ -1,0 +1,32 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #f1f2f4;
+}
+
+a {
+    text-decoration: none;
+}
+
+.box {
+    margin-top: 200px;
+    padding: 20px 30px 25px 30px;
+    max-width: 420px;
+    border-radius: 30px;
+    background: #ffffff24;
+    position: fixed;
+    text-align: center;
+    color: #f1f2f4;
+    backdrop-filter: blur(3px);
+}
+.border-box {
+    width: 500px;
+    height: 210px;
+    padding: 20px;
+    text-align: center;
+    border-radius: 30px;
+}
