@@ -1,7 +1,7 @@
-import fastify from 'fastify';
-import fastifyStatic from '@fastify/static';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
+import fastify from 'fastify'
+import fastifyStatic from '@fastify/static'
+import { fileURLToPath } from 'url'
+import { dirname, join } from 'path'
 import fs from 'fs'
 import path from 'path'
 import ejs from 'ejs'
@@ -65,7 +65,7 @@ server.get('/geetest', (request, reply) => {
     }
     if (gt && challenge) {
         content = content.replace('id="gt"', `id="gt" value="${gt}"`)
-        content = content.replace('id="challenge"', `id="challenge" value="${challenge}"`);
+        content = content.replace('id="challenge"', `id="challenge" value="${challenge}"`)
 
         /** 通过challenge参数保存文件 */
         const data = {
@@ -88,7 +88,7 @@ server.get('/geetest', (request, reply) => {
         } else {
             reply
                 .type('text/html')
-                .send(content);
+                .send(content)
         }
 
     }
@@ -96,10 +96,10 @@ server.get('/geetest', (request, reply) => {
     /** 回调地址 */
     if (callback) {
         const fileName = `${callback}.json`;
-        const filePath = path.join(__dirname, 'data', fileName);
+        const filePath = path.join(__dirname, 'data', fileName)
 
         try {
-            const content = fs.readFileSync(filePath, 'utf8');
+            const content = fs.readFileSync(filePath, 'utf8')
             reply
                 .type('application/json')
                 .send(content);
@@ -118,14 +118,13 @@ server.get('/geetest', (request, reply) => {
 
     /** 短链转发 */
     if (e) {
-        const token = request.query.e;
-        const valid = verifyToken(token);
+        const token = request.query.e
+        const valid = verifyToken(token)
         if (valid) {
             // 读取HTML模板文件
-            const template = fs.readFileSync('html/jump.ejs', 'utf8');
-
+            const template = fs.readFileSync('html/jump.ejs', 'utf8')
             // 使用EJS将targetUrl传递到HTML模板中
-            const popupHTML = ejs.render(template, { targetUrl });
+            const popupHTML = ejs.render(template, { targetUrl })
 
             reply
                 .code(200)
@@ -141,11 +140,6 @@ server.get('/geetest', (request, reply) => {
         }
 
     }
-    let randomNum
-    const timestamp = Date.now().toString();
-    const randomDigits = Math.floor(Math.random() * 10000000000);
-    randomNum = timestamp + randomDigits.toString().padStart(11, '0');
-    console.log(randomNum)
         reply
             .type('text/html')
             .send(content)
@@ -164,48 +158,24 @@ server.post('/geetest', (request, reply) => {
 // 接收 challenge 和 seccode 参数
 // 读取文件 - 更新数据 - 写入文件
 server.post('/updateResult', (req, res) => {
-    const { gt, challenge, validate, seccode } = req.body;
+    const { gt, challenge, validate, seccode } = req.body
 
     // 读取原文件
-    const filePath = `./data/${challenge}.json`;
-    let data = fs.readFileSync(filePath, 'utf8');
-    data = JSON.parse(data);
+    const filePath = `./data/${challenge}.json`
+    let data = fs.readFileSync(filePath, 'utf8')
+    data = JSON.parse(data)
 
     // 更新数据
     data.retcode = 200
-    data.data.gt = gt;
-    data.data.challenge = challenge;
-    data.data.validate = validate;
-    data.data.seccode = seccode;
+    data.data.gt = gt
+    data.data.challenge = challenge
+    data.data.validate = validate
+    data.data.seccode = seccode
 
 
     // 保存文件
-    fs.writeFileSync(filePath, JSON.stringify(data, null, 4));
-
-    reply.type('application/json').send(filePath);
-});
-
-/** 回调 */
-//server.get('/callback', (request, reply) => {
-//
-//    const challenge = request.query.challenge;
-//
-//    if (challenge) {
-//        const fileName = `${challenge}.json`;
-//        const filePath = path.join(__dirname, 'data', fileName);
-//
-//        try {
-//            const content = fs.readFileSync(filePath, 'utf8');
-//            reply.type('application/json').send(content);
-//        } catch (err) {
-//            reply.code(404).send({ error: 'Not found' });
-//        }
-//    } else {
-//        reply.code(400).send({ error: 'Challenge required' });
-//    }
-//
-//});
-
+    fs.writeFileSync(filePath, JSON.stringify(data, null, 4))
+})
 
 const tokenMap = {}
 function getRandomString(len) {
