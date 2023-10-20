@@ -2,15 +2,18 @@
 极验手动验证服务器
 ## 安装
 ```
+# Gitee
 git clone --depth=1 https://gitee.com/ikenxuan/geetest-validator.git
 
+# GitHub (更新不及时)
+git clone --depth=1 https://github.com/ikenxuan/geetest-validator.git
 ```
 ```
 # 安装依赖 npm 、pnpm 或 yarn
 npm install
 ```
 ## 使用前必做
-- 在文件 `js/index.js` 中修改 `serverUrl` 的值为你实际的IP或域名
+**！！在文件 `js/index.js` 中修改 `serverUrl` 的值为你实际的IP或域名**<br>
 
 ## 使用
 ```
@@ -40,24 +43,33 @@ npm run log
 [GET] /geetest
 
 # 从url获取指定参数
-[GET] /geetest?gt=xxx$chalenge=xxx
+[GET] /geetest?gt={gt}$chalenge={challenge}
 
 # 验证接口回调
-[GET] /geetest?callback=验证码的challenge值
+[GET] /geetest?callback={challenge}
 
 # 获取短链参数
-  * 在 `data` 中传入字段 `url` 的值为需要跳转的实际地址
+  * 在 `请求体` 中传入 `url` 字段为需要跳转的实际地址，返回字段 `token` 
 [POST] /geetest
 
-# 短链
+# 短链跳转接口
 [GET] /geetest?e=token
 
 
 ```
-## 手动输入
+## 手动输入参数
 <img src="img/demo1.jpg" width="400" alt="样式1">
 <img src="img/demo2.jpg" width="400" alt="样式1">
 <img src="img/demo3.jpg" width="400" alt="样式1">  
 
+## 从url获取参数
+```
+# 接口地址
+/geetest?gt={gt}&challenge={challenge}
+```
+
+## 短链跳转
+<img src="img/demo4.png">
+<img src="img/demo5.png">
 
 ### 魔改 https://github.com/Colter23/geetest-validator ，感谢

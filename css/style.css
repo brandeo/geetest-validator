@@ -21,6 +21,7 @@ a {
     position: fixed;
     backdrop-filter: blur(3px);
 }
+
 .border-box {
     width: 500px;
     height: 210px;
@@ -47,6 +48,7 @@ a {
     font-weight: bold;
     margin-top: 25px;
     margin-bottom: 20px;
+    color: #f1f2f4;
 }
 
 .toast-box {
@@ -102,6 +104,7 @@ a {
     border-color: #90b5e2;
     outline: 0;
 }
+
 .form-control:disabled {
     background-color: #f1f5f9;
     opacity: 1;
@@ -129,6 +132,28 @@ a {
     background-color: #070412;
     border-color: transparent;
 }
+
+.btn-spacer {
+    margin-top: 10px;
+    /* Adjust the top margin as per your desired spacing */
+}
+
+.online-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+    font-size: 50;
+    width: 340px;
+    height: 42px;
+    color: #f8fafc;
+    background-color: #0d0721e7;
+    text-align: center;
+    border-radius: 8px;
+}
+
 #success {
     background-color: #2fb344;
     cursor: default;
@@ -138,7 +163,15 @@ a {
     height: 42px;
     width: 340px;
     text-align: center;
-    border-radius: 8%;
+    border-radius: 8px;
+    background-color: #F3F3F3;
+}
+
+#online-wait {
+    height: 42px;
+    width: 340px;
+    text-align: center;
+    border-radius: 8px;
     background-color: #F3F3F3;
 }
 
@@ -146,21 +179,25 @@ a {
     display: none !important;
 }
 
+.online-hide {
+    display: none !important;
+}
+
 .loading {
     margin: auto;
-    width: 70px;
-    height: 20px;
+    width: 90px;
+    height: 0px;
 }
 
 .loading-dot {
     float: left;
-    width: 8px;
-    height: 8px;
+    width: 10px;
+    height: 10px;
     margin: 18px 4px;
     background: #ccc;
     border-radius: 50%;
     opacity: 0;
-    box-shadow: 0 0 2px black;
+    box-shadow: 0 8 3px black;
     animation: loadingFade 1s infinite;
 }
 
@@ -180,13 +217,21 @@ a {
     animation-delay: 0.3s;
 }
 
+.signature {
+    text-align: center;
+    font-weight: bold;
+    color: #fff;
+}
+
 @keyframes loadingFade {
     0% {
         opacity: 0;
     }
+
     50% {
         opacity: 0.8;
     }
+
     100% {
         opacity: 0;
     }

@@ -20,7 +20,7 @@ server.listen({
         process.exit(1)
     }
 
-    console.log(`Geetest手动验证服务器正在监听 ${address} 端口！`)
+    console.log(`Geetest手动验证服务器正在监听 ${address}`)
 })
 
 server.register(fastifyStatic, {
@@ -31,8 +31,8 @@ server.register(fastifyStatic, {
 server.get('/', (request, reply) => {
     let content = fs.readFileSync('html/index.html', 'utf8')
     reply
-    .type('text/html')
-    .send(content);
+        .type('text/html')
+        .send(content);
 
 })
 /** 验证地址 */
@@ -90,6 +90,7 @@ server.get('/geetest', (request, reply) => {
                 .type('text/html')
                 .send(content);
         }
+
     }
 
     /** 回调地址 */
@@ -140,7 +141,14 @@ server.get('/geetest', (request, reply) => {
         }
 
     }
-
+    let randomNum
+    const timestamp = Date.now().toString();
+    const randomDigits = Math.floor(Math.random() * 10000000000);
+    randomNum = timestamp + randomDigits.toString().padStart(11, '0');
+    console.log(randomNum)
+        reply
+            .type('text/html')
+            .send(content)
 
 });
 

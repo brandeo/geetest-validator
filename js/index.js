@@ -5,6 +5,7 @@ window.onload = function () {
     const resultBox = document.querySelector("#result")
     const resultBtn = document.querySelector("#result-btn")
     const toastBox = document.querySelector(".toast-box")
+    const testBtn = document.querySelector("#online-test")
 
     const gtInput = document.querySelector("#gt")
     const challengeInput = document.querySelector("#challenge")
@@ -44,7 +45,7 @@ window.onload = function () {
                         const challenge = challengeInput.value;
                         const seccode = seccodeInput.value;
                         const validate = validateInput.value
-                        const serverUrl = 'http://localhost:3001';
+                        const serverUrl = 'http://192.168.224.207:3001';
                         // 调用接口发送参数
                         fetch(`${serverUrl}/updateResult`, {
                             method: 'POST',
@@ -78,6 +79,31 @@ window.onload = function () {
             });
         }
     }
+
+    testBtn.onclick = () => {
+        let randomNum
+        const timestamp = Date.now().toString();
+        const randomDigits = Math.floor(Math.random() * 10000000000);
+        randomNum = timestamp + randomDigits.toString().padStart(11, '0');
+
+        /** https://www.geetest.com/demo/gt/register-fullpage 一键通过 */
+        /** https://www.geetest.com/demo/gt/register-icon 滑块验证 */
+        /** https://www.geetest.com/demo/gt/register-click 文字点选 */
+        const baseUrl = "https://www.geetest.com/demo/gt/register-click";
+        const url = `${baseUrl}?t=${randomNum}`;
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                const challenge = data.challenge;
+                const gt = data.gt;
+                console.log("challenge:", challenge);
+                console.log("gt:", gt);
+                window.location.href = `geetest?gt=${gt}&challenge=${challenge}`;
+            })
+            .catch(error => {
+                console.error("获取gt和challenge失败", error);
+            });
+    };
 
     genBtn.onclick = () => {
         let gt = gtInput.value;
