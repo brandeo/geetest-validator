@@ -13,14 +13,15 @@ a {
 }
 
 .box {
-    margin-top: 200px;
+    margin-top: 100px;
     padding: 20px 30px 90px 30px;
     max-width: 420px;
-    border-radius: 30px;
+    border-radius: 3px;
     background: #ffffff24;
     position: fixed;
     text-align: center;
     color: #f1f2f4;
+    box-shadow: 0 0.3px 0.7px rgba(233, 9, 9, 0.126), 0 0.9px 1.7px rgba(0, 0, 0, 0.179), 0 1.8px 3.5px rgba(0, 0, 0, 0.224), 0 3.7px 7.3px rgba(0, 0, 0, 0.277), 0 10px 20px rgba(0, 0, 0, 0.4);
     backdrop-filter: blur(3px);
 }
 
@@ -30,7 +31,7 @@ a {
     background: #ffffff24;
     color: #fff;
     text-decoration: none;
-    border-radius: 10px;
+    border-radius: 3px;
     position: absolute;
     bottom: 20px;
     right: 15px;

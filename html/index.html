@@ -8,6 +8,7 @@
     <title>验证码页面</title>
 
     <link href="../css/style.css" rel="stylesheet" type="text/css">
+    <link href="../css/Jiro.css" rel="stylesheet" type="text/css">
     <link href="../css/canvas.css" rel="stylesheet" type="text/css">
 
     <script src="../js/gt.js"></script>
@@ -20,15 +21,24 @@
             <div id="canvas">
                 <div class="box">
                     <div class="title">验证地址</div>
-                    <div class="form">
-                        <label class="form-label">gt</label>
-                        <input type="text" class="form-control" id="gt" placeholder="请输入 gt">
-                    </div>
-                    <div class="form">
-                        <label class="form-label">challenge</label>
-                        <input type="text" class="form-control" id="challenge" placeholder="请输入 challenge">
-                    </div>
 
+                    <div class="container">
+                        <section class="content bgcolor-7">
+                            <span class="input input--jiro">
+                                <input class="input__field input__field--jiro" type="text" id="gt">
+                                <label class="input__label input__label--jiro" for="input-10">
+                                    <span class="input__label-content input__label-content--jiro">GT</span>
+                                </label>
+                            </span>
+                            <span class="input input--jiro">
+                                <input class="input__field input__field--jiro" type="text" id="challenge">
+                                <label class="input__label input__label--jiro" for="input-11">
+                                    <span class="input__label-content input__label-content--jiro">CHALLENGE</span>
+                                </label>
+                            </span>
+                        </section>
+                    </div>
+                    <div class="btn-spacer"></div>
                     <div id="captcha">
                         <div id="gen" class="btn">生成验证码</div>
                         <div id="success" class="btn hide">验证成功</div>
@@ -56,13 +66,23 @@
                     </div>
                     <div id="result" class="hide">
                         <div class="result-title">验证结果</div>
-                        <div class="form">
-                            <label class="form-label">validate</label>
-                            <input type="text" class="form-control" id="validate" style="cursor: text;" disabled>
-                        </div>
-                        <div class="form">
-                            <label class="form-label">seccode</label>
-                            <input type="text" class="form-control" id="seccode" style="cursor: text;" disabled>
+                        <div class="container">
+                            <section class="content bgcolor-7">
+                                <span class="input input--jiro">
+                                    <input class="input__field input__field--jiro" style="display: block;" type="text"
+                                        id="validate">
+                                    <label class="input__label input__label--jiro">
+                                        <span class="input__label-content input__label-content--jiro">VALIDATE</span>
+                                    </label>
+                                </span>
+                                <span class="input input--jiro">
+                                    <input class="input__field input__field--jiro" style="display: block;" type="text"
+                                        id="seccode">
+                                    <label class="input__label input__label--jiro">
+                                        <span class="input__label-content input__label-content--jiro">SECCODE</span>
+                                    </label>
+                                </span>
+                            </section>
                         </div>
                         <div class="btn" id="result-btn">复制结果</div>
                     </div>
@@ -75,6 +95,43 @@
     <script src="../js/JoanClaret/projector.js"></script>
     <script src="../js/JoanClaret/canvas-renderer.js"></script>
     <script src="../js/JoanClaret/3d-lines-animation.js"></script>
+    <script src="../js/classie.js"></script>
+    <script>
+        (function () {
+            // trim polyfill : https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/Trim
+            if (!String.prototype.trim) {
+                (function () {
+                    // Make sure we trim BOM and NBSP
+                    var rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
+                    String.prototype.trim = function () {
+                        return this.replace(rtrim, '');
+                    };
+                })();
+            }
+
+            [].slice.call(document.querySelectorAll('input.input__field')).forEach(function (inputEl) {
+                // in case the input is already filled..
+                if (inputEl.value.trim() !== '') {
+                    classie.add(inputEl.parentNode, 'input--filled');
+                }
+
+                // events:
+                inputEl.addEventListener('focus', onInputFocus);
+                inputEl.addEventListener('blur', onInputBlur);
+            });
+
+            function onInputFocus(ev) {
+                classie.add(ev.target.parentNode, 'input--filled');
+            }
+
+            function onInputBlur(ev) {
+                if (ev.target.value.trim() === '') {
+                    classie.remove(ev.target.parentNode, 'input--filled');
+                }
+            }
+        })();
+    </script>
+
 </body>
 
 </html>

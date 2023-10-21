@@ -40,6 +40,9 @@ window.onload = function () {
                     const result = captchaObj.getValidate();
                     validateInput.value = result.geetest_validate;
                     seccodeInput.value = result.geetest_seccode;
+
+                    validateInput.readOnly = true
+                    seccodeInput.readOnly = true
                     try {
                         const gt = gtInput.value
                         const challenge = challengeInput.value;
