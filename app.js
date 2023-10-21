@@ -2,6 +2,7 @@ import fastify from 'fastify'
 import fastifyStatic from '@fastify/static'
 import { fileURLToPath } from 'url'
 import { dirname, join } from 'path'
+import os from 'os'
 import fs from 'fs'
 import path from 'path'
 import ejs from 'ejs'
@@ -22,7 +23,7 @@ server.listen({
         process.exit(1)
     }
 
-    console.log(`Geetest手动验证服务器正在监听 ${address}\n\n# 验证地址:\n${address}/geeetest`)
+    console.log(`Geetest手动验证服务器正在监听 ${address}\n\n# API接口:\nhttp://${getLocalIP()}/geetest`)
 })
 server.register(fastifyStatic, {
     root: join(__dirname),
@@ -72,12 +73,6 @@ server.get('/geetest', (request, reply) => {
         const data = {
             "retcode": 204,
             "info": "服务器支持GET请求，传入 gt 和 challenge 值即可还原验证码，把 challenge 值传入 callback 字段可进行结果查询",
-            "data": {
-                "gt": null,
-                "challenge": null,
-                "validate": null,
-                "seccode": null
-            },
         }
         const fileName = `${challenge}.json`
         const filePath = path.join(__dirname, 'data', fileName)
@@ -111,7 +106,6 @@ server.get('/geetest', (request, reply) => {
                 .send({
                     retcode: 204,
                     info: '未生成对应文件，请等待用户访问验证地址',
-                    data: null
                 });
         }
 
@@ -151,7 +145,7 @@ let targetUrl
 server.post('/geetest', (request, reply) => {
     const { gt, challenge, url } = request.body
 
-    /** 短链 */
+    /** 返回短链token */
     if (url && !(gt, challenge)) {
 
         targetUrl = url
@@ -168,7 +162,7 @@ server.post('/geetest', (request, reply) => {
 
     /** 返回 `验证地址短链` 和 `回调` */
     if (gt && challenge && !url) {
-        let link = 'http://192.168.224.207:3001/geetest'
+        let link = `http://${getLocalIP()}/geetest`
         targetUrl = `${link}?gt=${gt}&challenge=${challenge}`
         const token = getRandomString(4)
         /** 通过challenge参数保存文件 */
@@ -195,12 +189,16 @@ server.post('/updateResult', (req, res) => {
     let data = fs.readFileSync(filePath, 'utf8')
     data = JSON.parse(data)
 
+    // 初始化data
+    if(!data.data) {
+        data.data = {}
+    }
     // 更新数据
     data.retcode = 200
-    data.data.gt = gt
-    data.data.challenge = challenge
-    data.data.validate = validate
-    data.data.seccode = seccode
+    data.data.geetest_gt = gt
+    data.data.geetest_challenge = challenge
+    data.data.geetest_validate = validate
+    data.data.geetest_seccode = seccode
 
 
     // 保存文件
@@ -248,10 +246,14 @@ function verifyToken(token) {
     return true; //有效
 }
 
-function address() {
-    let { Host, Port, Https, Key } = this.cfg
-    let protocol = Https ? 'https' : 'http'
-    if (![80, 443].includes(Port)) Host += `:${Port}`
-    return `${protocol}://${Host}/GTest`
-}
-
+function getLocalIP() {
+    const interfaces = os.networkInterfaces();
+  
+    for (const name of Object.keys(interfaces)) {
+      for (const iface of interfaces[name]) {
+        if (iface.family === 'IPv4' && !iface.internal) {
+          return iface.address + ':' + cfg.Port;
+        }
+      }
+    }
+  }
