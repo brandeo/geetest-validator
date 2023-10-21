@@ -46,19 +46,19 @@ npm run log
 # 直接访问，可手动输入参数触发验证
 ```
 
-**[GET]** 参数 `gt` 和 `challenge`
+**[GET]** 字段 `gt` 和 `challenge`
 ```
 # 通过URL地址获取指定参数
 /geetest?gt={gt}&challenge={challenge}
 ```
 
-**[GET]** 参数 `callback`
+**[GET]** 字段 `callback`
 ```
 # 验证地址回调接口
 /geetest?callback={challenge}
 ```
 
-**[GET]** 参数 `e`
+**[GET]** 字段 `e`
 ```
 # 短链地址
 /geetest?e={token}
@@ -66,7 +66,7 @@ npm run log
 ***
 **[POST]** 主页 `/geetest`
 
-* `url` 的返回值 `data.token` 为 **[GET]** 参数 `e` 的值<br><br>
+* `url` 的返回值 `data.token` 为 **[GET]** 字段 `e` 的值<br><br>
 *请求示例*
 ```
 # Body
@@ -91,6 +91,7 @@ npm run log
 
 *请求示例*
 ```
+# Body
 {
     "gt": "3101554dd48afd3d07e93bd872d4492c",
     "challenge": "dc45e58c3874cc247a8d8e8ff34839af"
@@ -109,13 +110,13 @@ npm run log
 }
 ```
 
-
-<img src="img/demo1.png" width="400" alt="主页">
-<img src="img/demo2.png" width="400" alt="输入验证信息">
-<img src="img/demo3.png" width="400" alt="开始验证">
-<img src="img/demo4.png" width="400" alt="自动提交验证结果到回调接口">
-<img src="img/demo5.png" width="400" alt="短链地址过期提示">
-<img src="img/demo6.png" width="400" alt="验证码中间页">
+## UI样式
+<img src="img/demo1.png" width="500" alt="主页">
+<img src="img/demo2.png" width="500" alt="输入验证信息">
+<img src="img/demo3.png" width="500" alt="开始验证">
+<img src="img/demo4.png" width="500" alt="自动提交验证结果到回调接口">
+<img src="img/demo5.png" width="500" alt="短链地址过期提示">
+<img src="img/demo6.png" width="500" alt="验证码中间页">
 
 ## 参考
 https://github.com/Colter23/geetest-validator<br>
