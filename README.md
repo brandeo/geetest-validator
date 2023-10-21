@@ -57,6 +57,19 @@ npm run log
 # 验证地址回调接口
 /geetest?callback={challenge}
 ```
+```
+# 返回示例
+{
+    "retcode": 200,
+    "info": "服务器支持[GET/POST]请求，传入 gt 和 challenge 值即可还原验证码，把 challenge 值传入 callback 字段可进行结果查询"
+    "data": {
+        "geetest_gt": "",
+        "geetest_challenge": "",
+        "geetest_validate": "",
+        "geetest_seccode": ""
+    }
+}
+```
 
 **[GET]** 字段 `e`
 ```
@@ -67,6 +80,7 @@ npm run log
 **[POST]** 主页 `/geetest`
 
 * `url` 的返回值 `data.token` 为 **[GET]** 字段 `e` 的值<br><br>
+
 *请求示例*
 ```
 # Body
@@ -105,7 +119,7 @@ npm run log
     "message": "OK",
     "data": {
         "link": "https://api.example.com/geetest?e=Ug5b",
-        "result": "https://api.example.com/geetest?callback={challenge}"
+        "result": "https://api.example.com/geetest?callback=dc45e58c3874cc247a8d8e8ff34839af"
     }
 }
 ```

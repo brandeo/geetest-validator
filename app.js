@@ -23,7 +23,7 @@ server.listen({
         process.exit(1)
     }
 
-    console.log(`Geetest手动验证服务器正在监听 ${address}\n\n# API接口:\nhttp://${getLocalIP()}/geetest`)
+    console.log(`Geetest手动验证服务器正在监听 ${address}\n\n# API接口:\n [GET/POST] http://${getLocalIP()}/geetest`)
 })
 server.register(fastifyStatic, {
     root: join(__dirname),
@@ -72,7 +72,7 @@ server.get('/geetest', (request, reply) => {
         /** 通过challenge参数保存文件 */
         const data = {
             "retcode": 204,
-            "info": "服务器支持GET请求，传入 gt 和 challenge 值即可还原验证码，把 challenge 值传入 callback 字段可进行结果查询",
+            "info": "服务器支持[GET/POST]请求，传入 gt 和 challenge 值即可还原验证码，把 challenge 值传入 callback 字段可进行结果查询",
         }
         const fileName = `${challenge}.json`
         const filePath = path.join(__dirname, 'data', fileName)
