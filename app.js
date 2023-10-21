@@ -5,14 +5,16 @@ import { dirname, join } from 'path'
 import fs from 'fs'
 import path from 'path'
 import ejs from 'ejs'
+import YAML from 'yaml'
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
+let cfg = YAML.parse(fs.readFileSync('./config.yaml', 'utf8'))
 
 /** 开鸡！ */
 const server = fastify();
 server.listen({
-    port: 3001,
-    host: '0.0.0.0',
+    port: cfg.Port,
+    host: cfg.Host,
     log: true
 }, function (err, address) {
     if (err) {
@@ -20,9 +22,8 @@ server.listen({
         process.exit(1)
     }
 
-    console.log(`Geetest手动验证服务器正在监听 ${address}`)
+    console.log(`Geetest手动验证服务器正在监听 ${address}\n\n# 验证地址:\n${address}/geeetest`)
 })
-
 server.register(fastifyStatic, {
     root: join(__dirname),
     prefix: '/'
@@ -140,20 +141,49 @@ server.get('/geetest', (request, reply) => {
         }
 
     }
-        reply
-            .type('text/html')
-            .send(content)
+    reply
+        .type('text/html')
+        .send(content)
 
 });
 
 let targetUrl
 server.post('/geetest', (request, reply) => {
-    const requesBody = JSON.parse(request.body)
-    targetUrl = requesBody.url
-    const token = getRandomString(4)
-    reply.send({
-        token
-    })
+    const { gt, challenge, url } = request.body
+
+    /** 短链 */
+    if (url && !(gt, challenge)) {
+
+        targetUrl = url
+        const token = getRandomString(4)
+        reply
+            .send({
+                status: 0,
+                message: "OK",
+                data: {
+                    token
+                }
+            })
+    }
+
+    /** 返回 `验证地址短链` 和 `回调` */
+    if (gt && challenge && !url) {
+        let link = 'http://192.168.224.207:3001/geetest'
+        targetUrl = `${link}?gt=${gt}&challenge=${challenge}`
+        const token = getRandomString(4)
+        /** 通过challenge参数保存文件 */
+        const resultdata = {
+            status: 0,
+            message: "OK",
+            data: {
+                link: `${link}?e=${token}`,
+                result: `${link}?callback=${challenge}`
+            }
+        }
+        reply
+            .type('application/json')
+            .send(resultdata)
+    }
 })
 // 接收 challenge 和 seccode 参数
 // 读取文件 - 更新数据 - 写入文件
@@ -216,5 +246,12 @@ function verifyToken(token) {
     }
 
     return true; //有效
+}
+
+function address() {
+    let { Host, Port, Https, Key } = this.cfg
+    let protocol = Https ? 'https' : 'http'
+    if (![80, 443].includes(Port)) Host += `:${Port}`
+    return `${protocol}://${Host}/GTest`
 }
 

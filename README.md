@@ -12,8 +12,8 @@ git clone --depth=1 https://github.com/ikenxuan/geetest-validator.git
 # 安装依赖 npm 、pnpm 或 yarn
 npm install
 ```
-## 使用前必做
-**！！在文件 `js/index.js` 中修改 `serverUrl` 的值为你实际的IP或域名**<br>
+## 使用前必做！！
+**在文件 `js/index.js` 中修改 `serverUrl` 的值为你实际的IP或域名**<br>
 
 ## 使用
 ```
@@ -33,43 +33,90 @@ npm run stop
 # 输出日志
 npm run log
 ```
-默认监听 `0.0.0.0`:3001
+默认监听 `0.0.0.0`:3001，可通过修改 `config.yaml` 更改
 
 服务器开放端口即可对外访问
 
 ## 接口
+### 只有一个接口 `/geetest` <br><br>可通过提交的参数不同而实现不同功能，支持 `[GET]` 和 `[POST]`
+
+***
+**[GET]** 主页 `/geetest`
 ```
-# 验证页面手动输入指定参数
-[GET] /geetest
-
-# 从url获取指定参数
-[GET] /geetest?gt={gt}$chalenge={challenge}
-
-# 验证接口回调
-[GET] /geetest?callback={challenge}
-
-# 获取短链参数
-  * 在 `请求体` 中传入 `url` 字段为需要跳转的实际地址，返回字段 `token` 
-[POST] /geetest
-
-# 短链跳转接口
-[GET] /geetest?e=token
-
-
+# 直接访问，可手动输入参数触发验证
 ```
-## 手动输入参数
-<img src="img/demo1.jpg" width="400" alt="样式1">
-<img src="img/demo2.jpg" width="400" alt="样式1">
-<img src="img/demo3.jpg" width="400" alt="样式1">  
 
-## 从url获取参数
+**[GET]** 参数 `gt` 和 `challenge`
 ```
-# 接口地址
+# 通过URL地址获取指定参数
 /geetest?gt={gt}&challenge={challenge}
 ```
 
-## 短链跳转
-<img src="img/demo4.png">
-<img src="img/demo5.png">
+**[GET]** 参数 `callback`
+```
+# 验证地址回调接口
+/geetest?callback={challenge}
+```
 
-### 魔改 https://github.com/Colter23/geetest-validator ，感谢
+**[GET]** 参数 `e`
+```
+# 短链地址
+/geetest?e={token}
+```
+***
+**[POST]** 主页 `/geetest`
+
+* `url` 的返回值 `data.token` 为 **[GET]** 参数 `e` 的值<br><br>
+*请求示例*
+```
+# Body
+{
+    "url": "https://api.example.com/geetest?gt={gt}&challenge={challenge}"
+}
+```
+*返回示例*
+```
+# Body
+{
+    "status": 0,
+    "message": "OK",
+    "data": {
+      "token": "Ug5b"
+    }
+}
+```
+<br>
+
+* `gt` 和 `challenge` 的返回值 `data.link` 和 `data.result` 分别为短链地址与验证地址回调<br><br>
+
+*请求示例*
+```
+{
+    "gt": "3101554dd48afd3d07e93bd872d4492c",
+    "challenge": "dc45e58c3874cc247a8d8e8ff34839af"
+}
+```
+*返回示例*
+```
+# Body
+{
+    "status": 0,
+    "message": "OK",
+    "data": {
+        "link": "https://api.example.com/geetest?e=Ug5b",
+        "result": "https://api.example.com/geetest?callback={challenge}"
+    }
+}
+```
+
+
+<img src="img/demo1.png" width="400" alt="主页">
+<img src="img/demo2.png" width="400" alt="输入验证信息">
+<img src="img/demo3.png" width="400" alt="开始验证">
+<img src="img/demo4.png" width="400" alt="自动提交验证结果到回调接口">
+<img src="img/demo5.png" width="400" alt="短链地址过期提示">
+<img src="img/demo6.png" width="400" alt="验证码中间页">
+
+## 参考
+https://github.com/Colter23/geetest-validator<br>
+https://gitee.com/QQ1146638442/GT-Manual
