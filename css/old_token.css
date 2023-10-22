@@ -12,23 +12,25 @@ a {
     text-decoration: none;
 }
 
+#footer {
+    position: absolute;
+    text-align: center;
+    width: 100%;
+    font-size: 16px;
+    color: #c0c0c0;
+    bottom: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+}
+
 .box {
     color: #f1f2f4;
     margin-top: 100px;
-    padding: 20px 30px 25px 30px;
-    max-width: 400px;
+    padding: 20px 80px 25px 100px;
+    max-width: 500px;
     border-radius: 3px;
     background: #ffffff24;
     position: fixed;
     box-shadow: 0 0.3px 0.7px rgba(233, 9, 9, 0.126), 0 0.9px 1.7px rgba(0, 0, 0, 0.179), 0 1.8px 3.5px rgba(0, 0, 0, 0.224), 0 3.7px 7.3px rgba(0, 0, 0, 0.277), 0 10px 20px rgba(0, 0, 0, 0.4);
     backdrop-filter: blur(3px);
-}
-.border-box {
-    width: 500px;
-    height: 210px;
-    padding: 20px;
-    text-align: center;
-    border-radius: 3px;
-    background: #ffffffa8;
-    position: relative;
 }

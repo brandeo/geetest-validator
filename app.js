@@ -1,5 +1,6 @@
 import fastify from 'fastify'
 import fastifyStatic from '@fastify/static'
+import Template from '@fastify/view'
 import { fileURLToPath } from 'url'
 import { dirname, join } from 'path'
 import os from 'os'
@@ -8,8 +9,17 @@ import path from 'path'
 import ejs from 'ejs'
 import YAML from 'yaml'
 
+/** 初始化配置文件 */
+try {
+    fs.readFileSync('./config/config.yaml')
+} catch (checkcfg) {
+    checkcfg = fs.copyFileSync('./config/defSet/defSet.yaml', './config/config.yaml')
+}
 const __dirname = dirname(fileURLToPath(import.meta.url));
-let cfg = YAML.parse(fs.readFileSync('./config.yaml', 'utf8'))
+let cfg = YAML.parse(fs.readFileSync(process.cwd() + '/config/config.yaml', 'utf8'))
+
+/** 读取主页 */
+let content = fs.readFileSync('html/index.ejs', 'utf8')
 
 /** 开鸡！ */
 const server = fastify();
@@ -23,28 +33,32 @@ server.listen({
         process.exit(1)
     }
 
-    console.log(`Geetest手动验证服务器正在监听 ${address}\n\n# API接口:\n [GET/POST] http://${getLocalIP()}/geetest`)
+    console.log(`Geetest手动验证服务器正在监听 ${address}\n\n# API接口:\n[GET/POST] http://${getLocalIP()}/geetest`)
 })
 server.register(fastifyStatic, {
     root: join(__dirname),
     prefix: '/'
 });
+/** 注册ejs模板引擎 */
+server.register(Template, {
+    engine: {
+        ejs: ejs
+    },
+})
 
+/** 主页 */
 server.get('/', (request, reply) => {
-    let content = fs.readFileSync('html/index.html', 'utf8')
     reply
         .type('text/html')
-        .send(content);
+        .send(ejs.render(content, { copyright: cfg.copyright }))
 
 })
-/** 验证地址 */
+/** 主页 */
 server.get('/geetest', (request, reply) => {
     //获取query参数
     const { gt, challenge, callback, e } = request.query
     const accept = request.headers.accept
 
-    /** 读取html */
-    let content = fs.readFileSync('html/index.html', 'utf8')
 
     /** 填入参数 */
     if (gt && !challenge) {
@@ -84,7 +98,7 @@ server.get('/geetest', (request, reply) => {
         } else {
             reply
                 .type('text/html')
-                .send(content)
+                .send(ejs.render(content, { copyright: cfg.copyright }))
         }
 
     }
@@ -95,6 +109,7 @@ server.get('/geetest', (request, reply) => {
         const filePath = path.join(__dirname, 'data', fileName)
 
         try {
+            /** 返回valite等参数 */
             const content = fs.readFileSync(filePath, 'utf8')
             reply
                 .type('application/json')
@@ -127,17 +142,18 @@ server.get('/geetest', (request, reply) => {
                 .send(popupHTML)
         } else {
             // Token验证失败的响应
-            const html = fs.readFileSync('html/old_token.html', 'utf8')
+            const html = fs.readFileSync('html/old_token.ejs', 'utf8')
             reply
                 .code(403)
                 .type('text/html')
-                .send(html)
+                .send(ejs.render(html, { copyright: cfg.copyright }))
         }
 
     }
     reply
         .type('text/html')
-        .send(content)
+        .send(ejs.render(content, { copyright: cfg.copyright }))
+
 
 });
 
@@ -190,7 +206,7 @@ server.post('/updateResult', (req, res) => {
     data = JSON.parse(data)
 
     // 初始化data
-    if(!data.data) {
+    if (!data.data) {
         data.data = {}
     }
     // 更新数据
@@ -248,12 +264,14 @@ function verifyToken(token) {
 
 function getLocalIP() {
     const interfaces = os.networkInterfaces();
-  
+
     for (const name of Object.keys(interfaces)) {
-      for (const iface of interfaces[name]) {
-        if (iface.family === 'IPv4' && !iface.internal) {
-          return iface.address + ':' + cfg.Port;
+        for (const iface of interfaces[name]) {
+            if (iface.family === 'IPv4' && !iface.internal) {
+                return iface.address + ':' + cfg.Port;
+            }
         }
-      }
     }
-  }
+}
+
+

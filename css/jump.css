@@ -12,6 +12,17 @@ a {
     text-decoration: none;
 }
 
+#footer {
+    position: absolute;
+    text-align: center;
+    width: 100%;
+    font-size: 16px;
+    color: #c0c0c0;
+    bottom: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+}
+
 .box {
     margin-top: 100px;
     padding: 20px 30px 90px 30px;
@@ -24,7 +35,10 @@ a {
     box-shadow: 0 0.3px 0.7px rgba(233, 9, 9, 0.126), 0 0.9px 1.7px rgba(0, 0, 0, 0.179), 0 1.8px 3.5px rgba(0, 0, 0, 0.224), 0 3.7px 7.3px rgba(0, 0, 0, 0.277), 0 10px 20px rgba(0, 0, 0, 0.4);
     backdrop-filter: blur(3px);
 }
-
+.btn-spacer {
+    margin-top: 12px;
+    /* Adjust the top margin as per your desired spacing */
+}
 .button {
     display: inline-block;
     padding: 10px 25px;
