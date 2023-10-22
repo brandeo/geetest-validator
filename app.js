@@ -23,11 +23,12 @@ console.log(cfg.Address)
 let content = fs.readFileSync('html/index.ejs', 'utf8')
 
 /** 开鸡！ */
-const server = fastify();
+const server = fastify({
+    logger: true
+})
 server.listen({
     port: cfg.Port,
     host: '::',
-    log: true
 }, async function (err, address) {
     if (err) {
         fastify.log.error(err)
