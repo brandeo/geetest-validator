@@ -1,5 +1,5 @@
-# 地址
-Host: 0.0.0.0
+# 域名或IP(如：http://api.example.com)
+Address: 
 
 # 端口
 Port: 3001

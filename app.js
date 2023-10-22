@@ -1,3 +1,4 @@
+import { publicIpv4, publicIpv6 } from 'public-ip'
 import fastify from 'fastify'
 import fastifyStatic from '@fastify/static'
 import Template from '@fastify/view'
@@ -17,7 +18,7 @@ try {
 }
 const __dirname = dirname(fileURLToPath(import.meta.url));
 let cfg = YAML.parse(fs.readFileSync(process.cwd() + '/config/config.yaml', 'utf8'))
-
+console.log(cfg.Address)
 /** 读取主页 */
 let content = fs.readFileSync('html/index.ejs', 'utf8')
 
@@ -25,15 +26,14 @@ let content = fs.readFileSync('html/index.ejs', 'utf8')
 const server = fastify();
 server.listen({
     port: cfg.Port,
-    host: cfg.Host,
+    host: '::',
     log: true
-}, function (err, address) {
+}, async function (err, address) {
     if (err) {
         fastify.log.error(err)
         process.exit(1)
     }
-
-    console.log(`Geetest手动验证服务器正在监听 ${address}\n\n# API接口:\n[GET/POST] http://${getLocalIP()}/geetest`)
+    console.log(`Geetest手动验证服务器正在监听 ${address}\n\n# API接口:\n[GET/POST] ${await GetIP()}/geetest`)
 })
 server.register(fastifyStatic, {
     root: join(__dirname),
@@ -47,14 +47,14 @@ server.register(Template, {
 })
 
 /** 主页 */
-server.get('/', (request, reply) => {
+server.get('/', async (request, reply) => {
     reply
         .type('text/html')
         .send(ejs.render(content, { copyright: cfg.copyright }))
 
 })
 /** 主页 */
-server.get('/geetest', (request, reply) => {
+server.get('/geetest', async (request, reply) => {
     //获取query参数
     const { gt, challenge, callback, e } = request.query
     const accept = request.headers.accept
@@ -129,17 +129,19 @@ server.get('/geetest', (request, reply) => {
     /** 短链转发 */
     if (e) {
         const token = request.query.e
-        const valid = verifyToken(token)
+        const valid = await verifyToken(token)
         if (valid) {
             // 读取HTML模板文件
             const template = fs.readFileSync('html/jump.ejs', 'utf8')
             // 使用EJS将targetUrl传递到HTML模板中
-            const popupHTML = ejs.render(template, { targetUrl })
 
             reply
                 .code(200)
                 .type('text/html')
-                .send(popupHTML)
+                .send(ejs.render(template, {
+                    targetUrl: targetUrl,
+                    copyright: cfg.copyright
+                }))
         } else {
             // Token验证失败的响应
             const html = fs.readFileSync('html/old_token.ejs', 'utf8')
@@ -158,7 +160,7 @@ server.get('/geetest', (request, reply) => {
 });
 
 let targetUrl
-server.post('/geetest', (request, reply) => {
+server.post('/geetest', async (request, reply) => {
     const { gt, challenge, url } = request.body
 
     /** 返回短链token */
@@ -178,7 +180,7 @@ server.post('/geetest', (request, reply) => {
 
     /** 返回 `验证地址短链` 和 `回调` */
     if (gt && challenge && !url) {
-        let link = `http://${getLocalIP()}/geetest`
+        let link = `${cfg.Address}/geetest`
         targetUrl = `${link}?gt=${gt}&challenge=${challenge}`
         const token = getRandomString(4)
         /** 通过challenge参数保存文件 */
@@ -251,7 +253,7 @@ function getRandomString(len) {
 }
 
 /** 验证token有效性 */
-function verifyToken(token) {
+async function verifyToken(token) {
     const now = Date.now()
     const tokenData = tokenMap[token]
 
@@ -262,16 +264,11 @@ function verifyToken(token) {
     return true; //有效
 }
 
-function getLocalIP() {
-    const interfaces = os.networkInterfaces();
-
-    for (const name of Object.keys(interfaces)) {
-        for (const iface of interfaces[name]) {
-            if (iface.family === 'IPv4' && !iface.internal) {
-                return iface.address + ':' + cfg.Port;
-            }
-        }
+async function GetIP() {
+    if (cfg.Address !== '') {
+        return cfg.Address
+    } else {
+        const ipv4 = await publicIpv4()
+        return ipv4 ? `http://${ipv4}:${cfg.Port}` : `http://[${await publicIpv6()}]:${cfg.Port}`
     }
 }
-
-
