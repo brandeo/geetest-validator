@@ -199,8 +199,8 @@ server.post('/geetest', async (request, reply) => {
 })
 // 接收 challenge 和 seccode 参数
 // 读取文件 - 更新数据 - 写入文件
-server.post('/updateResult', (req, res) => {
-    const { gt, challenge, validate, seccode } = req.body
+server.post('/updateResult', (request, reply) => {
+    const { gt, challenge, validate, seccode } = request.body
 
     // 读取原文件
     const filePath = `./data/${challenge}.json`
@@ -221,6 +221,7 @@ server.post('/updateResult', (req, res) => {
 
     // 保存文件
     fs.writeFileSync(filePath, JSON.stringify(data, null, 4))
+    reply.send(data)
 })
 
 const tokenMap = {}
