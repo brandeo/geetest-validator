@@ -1,4 +1,4 @@
-<img src="https://socialify.git.ci/ikenxuan/geetest-validator/image?description=1&descriptionEditable=A%20Geetest%20manual%20verification%20server%20that%20supports%20%5BGET%2FPOST%5D%20requests%20and%20short%20link%20jumps&font=Raleway&forks=1&issues=1&language=1&logo=https%3A%2F%2Fs4.aconvert.com%2Fconvert%2Fp3r68-cdx67%2Fa8bi7-0x0l1.svg&name=1&owner=1&pattern=Circuit%20Board&pulls=1&stargazers=1&theme=Light" alt="geetest-validator" width="640" height="320" />
+<img src="https://socialify.git.ci/ikenxuan/geetest-validator/image?description=1&font=Inter&forks=1&issues=1&language=1&name=1&owner=1&pulls=1&stargazers=1&theme=Light" alt="geetest-validator" width="640" height="320" />
 
 # geetest-manual-validator
 极验手动验证服务器
