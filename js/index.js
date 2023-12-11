@@ -46,9 +46,16 @@ window.onload = function () {
             })
             .onSuccess(() => {
               const result = captchaObj.getValidate();
-              
+
               validateInput.value = result.geetest_validate;
               seccodeInput.value = result.geetest_seccode;
+
+              // 触发获取焦点
+              validateInput.dispatchEvent(new Event("focus"));
+              validateInput.dispatchEvent(new Event("blur"));
+              // 触发失去焦点
+              seccodeInput.dispatchEvent(new Event("focus"));
+              seccodeInput.dispatchEvent(new Event("blur"));
 
               validateInput.readOnly = true;
               seccodeInput.readOnly = true;
@@ -79,6 +86,7 @@ window.onload = function () {
               if (now) {
                 hide(wait);
                 show(successBtn);
+                successBtn.setAttribute("data-status", "success");
               }
               show(resultBox);
             })
@@ -94,7 +102,16 @@ window.onload = function () {
     }
   }
 
-  testBtn.onclick = () => {
+  testBtn.onclick = (e) => {
+    e.preventDefault();
+    if (successBtn.getAttribute("data-status") === "success") {
+      // 重置属性
+      successBtn.setAttribute("data-status", "");
+      // 隐藏成功按钮
+      hide(successBtn);
+      // 显示开始验证按钮
+      show(genBtn);
+    }
     let randomNum;
     const timestamp = Date.now().toString();
     const randomDigits = Math.floor(Math.random() * 10000000000);
@@ -108,11 +125,17 @@ window.onload = function () {
     fetch(url)
       .then((response) => response.json())
       .then((data) => {
-        const challenge = data.challenge;
-        const gt = data.gt;
-        console.log("challenge:", challenge);
-        console.log("gt:", gt);
-        window.location.href = `geetest?gt=${gt}&challenge=${challenge}`;
+        gtInput.value = data.gt;
+        challengeInput.value = data.challenge;
+
+        // 触发获取焦点
+        gtInput.dispatchEvent(new Event("focus"));
+        gtInput.dispatchEvent(new Event("blur"));
+        // 触发失去焦点
+        challengeInput.dispatchEvent(new Event("focus"));
+        challengeInput.dispatchEvent(new Event("blur"));
+
+        // window.location.href = `geetest?gt=${gt}&challenge=${challenge}`;
       })
       .catch((error) => {
         console.error("获取gt和challenge失败", error);
