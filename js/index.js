@@ -135,6 +135,7 @@ window.onload = function () {
         challengeInput.dispatchEvent(new Event("focus"));
         challengeInput.dispatchEvent(new Event("blur"));
 
+        showToastBox("获取参数成功！请点击生成验证码");
         // window.location.href = `geetest?gt=${gt}&challenge=${challenge}`;
       })
       .catch((error) => {
