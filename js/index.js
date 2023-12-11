@@ -103,6 +103,11 @@ window.onload = function () {
   }
 
   testBtn.onclick = (e) => {
+    const currentUrl = window.location.href;
+    if (currentUrl.includes('?')) {
+      window.location.href = `${window.location.origin}/geetest`;
+      return;
+    }
     e.preventDefault();
     if (successBtn.getAttribute("data-status") === "success") {
       // 重置属性
