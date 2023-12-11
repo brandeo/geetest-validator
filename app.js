@@ -60,7 +60,6 @@ server.register(Template, {
 server.get("/geetest", async (request, reply) => {
   //获取query参数
   const { gt, challenge, callback, e } = request.query;
-  const accept = request.headers.accept;
 
   /** 填入参数 */
   if (gt && !challenge) {
@@ -92,7 +91,7 @@ server.get("/geetest", async (request, reply) => {
     const fileName = `${challenge}.json`;
     const filePath = path.join(__dirname, "data", fileName);
     fs.writeFileSync(filePath, JSON.stringify(data, null, 4));
-    if (accept === "application/json") {
+    if (headers.accept === "application/json") {
       reply.type("application/json").send(fileName);
     } else {
       reply
@@ -145,6 +144,7 @@ server.get("/geetest", async (request, reply) => {
         .send(ejs.render(html, { copyright: cfg.copyright }));
     }
   }
+
   reply
     .type("text/html")
     .send(ejs.render(content, { copyright: cfg.copyright }));
@@ -185,13 +185,30 @@ server.post("/geetest", async (request, reply) => {
     reply.type("application/json").send(resultdata);
   }
 });
+
 // 接收 challenge 和 seccode 参数
 // 读取文件 - 更新数据 - 写入文件
 server.post("/updateResult", (request, reply) => {
   const { gt, challenge, validate, seccode } = request.body;
+  const headers = request.headers;
+  const filePath = `./data/${challenge}.json`;
+
+  // 接受强制写入
+  if (headers["force-write"]) {
+    const data = {
+      retcode: 200,
+      data: {
+        gt: gt,
+        challenge: challenge,
+        validate: validate,
+        seccode: seccode,
+      },
+    };
+    fs.writeFileSync(filePath, JSON.stringify(data, null, 4));
+    return true;
+  }
 
   // 读取原文件
-  const filePath = `./data/${challenge}.json`;
   let data = fs.readFileSync(filePath, "utf8");
   data = JSON.parse(data);
 

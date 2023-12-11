@@ -70,6 +70,7 @@ window.onload = function () {
                   method: "POST",
                   headers: {
                     "Content-Type": "application/json",
+                    "Force-Write": "true"
                   },
                   body: JSON.stringify({
                     gt,
