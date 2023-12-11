@@ -2,7 +2,6 @@ import { publicIpv4, publicIpv6 } from "public-ip";
 import fastify from "fastify";
 import fastifyStatic from "@fastify/static";
 import Template from "@fastify/view";
-import { v4 as uuidv4 } from "uuid";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 import fs from "fs";
@@ -59,7 +58,6 @@ server.register(Template, {
 
 /** 主页 */
 server.get("/geetest", async (request, reply) => {
-  const uuid = await generateUuid()
   //获取query参数
   const { gt, challenge, callback, e } = request.query;
   const accept = request.headers.accept;
@@ -81,7 +79,10 @@ server.get("/geetest", async (request, reply) => {
   }
   if (gt && challenge) {
     content = content.replace('id="gt"', `id="gt" value="${gt}"`);
-    content = content.replace('id="challenge"', `id="challenge" value="${challenge}"`);
+    content = content.replace(
+      'id="challenge"',
+      `id="challenge" value="${challenge}"`
+    );
 
     /** 通过challenge参数保存文件 */
     const data = {
@@ -149,10 +150,6 @@ server.get("/geetest", async (request, reply) => {
     .send(ejs.render(content, { copyright: cfg.copyright }));
 });
 
-
-
-
-
 let targetUrl;
 server.post("/geetest", async (request, reply) => {
   const { gt, challenge, url } = request.body;
@@ -160,8 +157,8 @@ server.post("/geetest", async (request, reply) => {
   /** 返回短链token */
   if (url && !(gt, challenge)) {
     targetUrl = url;
-    const token = getRandomString(4);
-    reply.send({
+    const token = CreateToken(4);
+    reply.type("application/json").send({
       status: 0,
       message: "OK",
       data: {
@@ -174,7 +171,8 @@ server.post("/geetest", async (request, reply) => {
   if (gt && challenge && !url) {
     let link = `${cfg.Address}/geetest`;
     targetUrl = `${link}?gt=${gt}&challenge=${challenge}`;
-    const token = getRandomString(4);
+    const token = CreateToken(4);
+    
     /** 通过challenge参数保存文件 */
     const resultdata = {
       status: 0,
@@ -214,7 +212,7 @@ server.post("/updateResult", (request, reply) => {
 });
 
 const tokenMap = {};
-function getRandomString(len) {
+function CreateToken(len) {
   let _charStr =
       "abacdefghjklmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ0123456789",
     min = 0,
@@ -235,6 +233,7 @@ function getRandomString(len) {
       return indexTemp;
     }, i);
     _str += _charStr[index];
+    _str = btoa(_str);
   }
   tokenMap[_str] = {
     createTime: Date.now(),
@@ -264,8 +263,4 @@ async function GetIP() {
       ? `http://${ipv4}:${cfg.Port}`
       : `http://[${await publicIpv6()}]:${cfg.Port}`;
   }
-}
-
-async function generateUuid() {
-  return uuidv4();
 }
