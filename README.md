@@ -14,8 +14,6 @@ git clone --depth=1 https://github.com/ikenxuan/geetest-validator.git
 # 安装依赖 npm 、pnpm 或 yarn
 npm install
 ```
-## 使用前必做！！
-**在文件 `js/index.js` 中修改 `serverUrl` 的值为你实际的IP或域名**<br>
 
 ## 使用
 ```

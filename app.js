@@ -172,7 +172,7 @@ server.post("/geetest", async (request, reply) => {
     let link = `${cfg.Address}/geetest`;
     targetUrl = `${link}?gt=${gt}&challenge=${challenge}`;
     const token = CreateToken(4);
-    
+
     /** 通过challenge参数保存文件 */
     const resultdata = {
       status: 0,
@@ -256,7 +256,7 @@ async function verifyToken(token) {
 
 async function GetIP() {
   if (cfg.Address !== "") {
-    return cfg.Address;
+    return `${cfg.Address}:${cfg.Port}`;
   } else {
     const ipv4 = await publicIpv4();
     return ipv4
