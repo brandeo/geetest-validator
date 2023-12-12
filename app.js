@@ -91,7 +91,7 @@ server.get("/geetest", async (request, reply) => {
     const fileName = `${challenge}.json`;
     const filePath = path.join(__dirname, "data", fileName);
     fs.writeFileSync(filePath, JSON.stringify(data, null, 4));
-    if (headers.accept === "application/json") {
+    if (request.headers["accept"] === "application/json") {
       reply.type("application/json").send(fileName);
     } else {
       reply
