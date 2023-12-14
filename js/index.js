@@ -155,9 +155,15 @@ window.onload = function () {
             "gt": data.gt,
             "challenge": data.challenge,
           }, null, 4),
-        });
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            showToastBox(`验证成功！validate: ${data.data.validate}`)
+          })
+        showToastBox("正在自动验证 ~ ~ ~");
       })
       .catch((error) => {
+        showToastBox("验证失败", error);
         console.error("获取gt和challenge失败", error);
       });
   };
