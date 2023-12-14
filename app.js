@@ -162,11 +162,15 @@ server.post("/geetest", async (request, reply) => {
 
   if (user && gt && challenge) {
     console.log(`Token verified for user: ${user}`);
+    const validate = await get_validate(gt, challenge)
     const resultdata = {
       status: 0,
       message: "OK",
       data: {
-        validate: await get_validate(gt, challenge),
+        geetest_gt: gt,
+        geetest_challenge: challenge,
+        geetest_validate: validate,
+        geetest_seccode: validate + '|jordan'
       },
     };
     await reply.type("application/json").send(resultdata);
