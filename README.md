@@ -11,8 +11,11 @@ git clone --depth=1 https://gitee.com/ikenxuan/geetest-validator.git
 git clone --depth=1 https://github.com/ikenxuan/geetest-validator.git
 ```
 ```
-# 安装依赖 npm 、pnpm 或 yarn
+# 安装nodejs依赖 npm 、pnpm 或 yarn
 npm install
+
+# 安装python依赖 (v3.8.x < python版本 < v3.11.x)
+pip install -r requirements.txt
 ```
 
 ## 使用
@@ -33,7 +36,7 @@ npm run stop
 # 输出日志
 npm run log
 ```
-默认监听 `0.0.0.0`:3001，可通过修改 `config.yaml` 更改
+默认监听 `[::]`:3001，可通过修改 `config.yaml` 更改
 
 服务器开放端口即可对外访问
 
