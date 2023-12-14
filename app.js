@@ -10,7 +10,6 @@ import path from "path";
 import ejs from "ejs";
 import YAML from "yaml";
 
-
 /** 初始化配置文件 */
 try {
   fs.readFileSync("./config/config.yaml");
@@ -301,25 +300,47 @@ async function GetIP() {
 async function get_validate(gt, challenge) {
   return new Promise((resolve, reject) => {
     let outputData = "";
-    const isWindows = process.platform === 'win32';
+    const isWindows = process.platform === "win32";
 
     let pythonCommand;
     if (isWindows) {
-      pythonCommand = 'python'; // On Windows, use 'python' assuming it's in the PATH
+      pythonCommand = "python"; // On Windows, use 'python' assuming it's in the PATH
     } else {
-      // On Unix-like systems, check if 'python3' is available
+      // On Unix-like systems, first try 'python3', then 'python'
+      const python3Command = "python3";
+      const pythonCommandFallback = "python";
+
       try {
         // Try running 'python3' to see if it exists
-        spawn.sync('python3', ['--version'], { stdio: 'ignore' });
-        pythonCommand = 'python3';
+        const python3Check = spawnSync("which", [python3Command], {
+          stdio: "pipe",
+          encoding: "utf-8",
+        });
+        if (python3Check.status === 0 && python3Check.stdout.trim() !== "") {
+          pythonCommand = python3Check.stdout.trim();
+        }
       } catch (error) {
-        // If 'python3' is not available, fall back to 'python'
-        pythonCommand = 'python';
+        try {
+          // If 'python3' is not available, try 'python'
+          const pythonCheck = spawnSync("which", [pythonCommandFallback], {
+            stdio: "pipe",
+            encoding: "utf-8",
+          });
+          if (pythonCheck.status === 0 && pythonCheck.stdout.trim() !== "") {
+            pythonCommand = pythonCheck.stdout.trim();
+          }
+        } catch (error) {
+          try {
+            pythonCommand = "python3";
+          } catch (error) {
+            // Both 'python3' and 'python' are not available
+            console.error("Error: Python not found on the system.");
+            process.exit(1);
+          }
+        }
       }
     }
-    
-    // Now spawn the Python process using the selected command
-    const pythonProcess = spawn(pythonCommand, ['app.py', gt, challenge]);
+    const pythonProcess = spawn(pythonCommand, ["app.py", gt, challenge]);
     pythonProcess.stdout.on("data", (data) => {
       outputData += data.toString();
     });
