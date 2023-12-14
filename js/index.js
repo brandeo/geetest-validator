@@ -158,7 +158,7 @@ window.onload = function () {
         })
           .then((response) => response.json())
           .then((data) => {
-            showToastBox(`验证成功！validate: ${data.data.validate}`)
+            showToastBox(`验证成功！validate: \n${data.data.validate}`)
           })
           .catch((error) => { showToastBox("验证失败", error) })
         showToastBox("正在自动验证 ~ ~ ~");
