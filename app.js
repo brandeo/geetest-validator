@@ -301,8 +301,25 @@ async function GetIP() {
 async function get_validate(gt, challenge) {
   return new Promise((resolve, reject) => {
     let outputData = "";
-    const pythonProcess = spawn("python", ["app.py", gt, challenge]);
+    const isWindows = process.platform === 'win32';
 
+    let pythonCommand;
+    if (isWindows) {
+      pythonCommand = 'python'; // On Windows, use 'python' assuming it's in the PATH
+    } else {
+      // On Unix-like systems, check if 'python3' is available
+      try {
+        // Try running 'python3' to see if it exists
+        spawn.sync('python3', ['--version'], { stdio: 'ignore' });
+        pythonCommand = 'python3';
+      } catch (error) {
+        // If 'python3' is not available, fall back to 'python'
+        pythonCommand = 'python';
+      }
+    }
+    
+    // Now spawn the Python process using the selected command
+    const pythonProcess = spawn(pythonCommand, ['app.py', gt, challenge]);
     pythonProcess.stdout.on("data", (data) => {
       outputData += data.toString();
     });
