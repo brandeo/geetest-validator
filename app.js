@@ -4,10 +4,12 @@ import fastifyStatic from "@fastify/static";
 import Template from "@fastify/view";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
+import { spawn } from "child_process";
 import fs from "fs";
 import path from "path";
 import ejs from "ejs";
 import YAML from "yaml";
+
 
 /** 初始化配置文件 */
 try {
@@ -22,13 +24,15 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 let cfg = YAML.parse(
   fs.readFileSync(process.cwd() + "/config/config.yaml", "utf8")
 );
-console.log(cfg.Address);
+let tokens = YAML.parse(
+  fs.readFileSync(process.cwd() + "/config/token.yaml", "utf8")
+);
 /** 读取主页 */
 let content = fs.readFileSync("html/index.ejs", "utf8");
 
 /** 开鸡！ */
 const server = fastify({
-  logger: true,
+  // logger: true,
 });
 server.listen(
   {
@@ -152,23 +156,22 @@ server.get("/geetest", async (request, reply) => {
 
 let targetUrl;
 server.post("/geetest", async (request, reply) => {
-  const { gt, challenge, url } = request.body;
+  let { gt, challenge, url } = request.body;
+  const token = request.headers["authorization"];
 
-  /** 返回短链token */
-  if (url && !(gt, challenge)) {
-    targetUrl = url;
-    const token = CreateToken(4);
-    reply.type("application/json").send({
+  const user = Object.keys(tokens).find((key) => tokens[key] === token);
+
+  if (user && gt && challenge) {
+    console.log(`Token verified for user: ${user}`);
+    const resultdata = {
       status: 0,
       message: "OK",
       data: {
-        token,
+        validate: await get_validate(gt, challenge),
       },
-    });
-  }
-
-  /** 返回 `验证地址短链` 和 `回调` */
-  if (gt && challenge && !url) {
+    };
+    await reply.type("application/json").send(resultdata);
+  } else if (gt && challenge && !url) {
     let link = `${cfg.Address}/geetest`;
     targetUrl = `${link}?gt=${gt}&challenge=${challenge}`;
     const token = CreateToken(4);
@@ -183,6 +186,19 @@ server.post("/geetest", async (request, reply) => {
       },
     };
     reply.type("application/json").send(resultdata);
+  }
+
+  /** 返回短链token */
+  if (url && !(gt, challenge)) {
+    targetUrl = url;
+    const token = CreateToken(4);
+    reply.type("application/json").send({
+      status: 0,
+      message: "OK",
+      data: {
+        token,
+      },
+    });
   }
 });
 
@@ -280,4 +296,26 @@ async function GetIP() {
       ? `http://${ipv4}:${cfg.Port}`
       : `http://[${await publicIpv6()}]:${cfg.Port}`;
   }
+}
+
+async function get_validate(gt, challenge) {
+  return new Promise((resolve, reject) => {
+    let outputData = "";
+    const pythonProcess = spawn("python", ["app.py", gt, challenge]);
+
+    pythonProcess.stdout.on("data", (data) => {
+      outputData += data.toString();
+    });
+
+    pythonProcess.on("close", () => {
+      const lines = outputData.split("\n");
+      const validate = lines[lines.length - 2]; // -2 因为最后一行可能是空行
+      console.log("validate:", validate);
+      resolve(validate);
+    });
+
+    pythonProcess.stderr.on("data", (data) => {
+      reject(data.toString()); // 在发生错误时拒绝 Promise
+    });
+  });
 }

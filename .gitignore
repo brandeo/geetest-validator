@@ -6,3 +6,8 @@ data/
 logs/
 yarn-error.log
 config/config.yaml
+config/token.yaml
+app.py
+demo.cjs
+test.jpg
+AGENCYB.TTF

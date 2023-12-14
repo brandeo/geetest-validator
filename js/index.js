@@ -124,9 +124,10 @@ window.onload = function () {
     randomNum = timestamp + randomDigits.toString().padStart(11, "0");
 
     /** https://www.geetest.com/demo/gt/register-fullpage 一键通过 */
-    /** https://www.geetest.com/demo/gt/register-icon 滑块验证 */
+    /** https://www.geetest.com/demo/gt/register-icon 图案点选 */
     /** https://www.geetest.com/demo/gt/register-click 文字点选 */
-    const baseUrl = "https://www.geetest.com/demo/gt/register-fullpage";
+    /** https://www.geetest.com/demo/gt/register-slide 滑块验证*/
+    const baseUrl = "https://www.geetest.com/demo/gt/register-icon";
     const url = `${baseUrl}?t=${randomNum}`;
     fetch(url)
       .then((response) => response.json())
@@ -143,6 +144,18 @@ window.onload = function () {
 
         showToastBox("获取参数成功！请点击生成验证码");
         // window.location.href = `geetest?gt=${gt}&challenge=${challenge}`;
+        fetch(`${window.location.origin}/geetest`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Force-Write": "true",
+            "authorization": "verification"
+          },
+          body: JSON.stringify({
+            "gt": data.gt,
+            "challenge": data.challenge,
+          }, null, 4),
+        });
       })
       .catch((error) => {
         console.error("获取gt和challenge失败", error);
