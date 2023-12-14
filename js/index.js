@@ -160,10 +160,11 @@ window.onload = function () {
           .then((data) => {
             showToastBox(`验证成功！validate: ${data.data.validate}`)
           })
+          .catch((error) => { showToastBox("验证失败", error) })
         showToastBox("正在自动验证 ~ ~ ~");
       })
       .catch((error) => {
-        showToastBox("验证失败", error);
+        showToastBox("获取gt和challenge失败", error);
         console.error("获取gt和challenge失败", error);
       });
   };
