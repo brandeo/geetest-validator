@@ -176,7 +176,7 @@ server.post("/geetest", async (request, reply) => {
     };
     await reply.type("application/json").send(resultdata);
   } else if (gt && challenge && !url) {
-    let link = `${cfg.Address}:${cfg.SSL ? cfg.SSL : cfg.port}/geetest`;
+    let link = `${cfg.Address}:${cfg.SSL ? cfg.SSL : cfg.Port}/geetest`;
     targetUrl = `${link}?gt=${gt}&challenge=${challenge}`;
     const token = CreateToken(4);
 
@@ -293,12 +293,12 @@ async function verifyToken(token) {
 
 async function GetIP() {
   if (cfg.Address !== "") {
-    return `${cfg.Address}:${cfg.Port}`;
+    return `${cfg.Address}:${cfg.SSL ? cfg.SSL : cfg.Port}`;
   } else {
     const ipv4 = await publicIpv4();
     return ipv4
-      ? `http://${ipv4}:${cfg.Port}`
-      : `http://[${await publicIpv6()}]:${cfg.Port}`;
+      ? `http://${ipv4}:${cfg.SSL ? cfg.SSL : cfg.Port}`
+      : `http://[${await publicIpv6()}]:${cfg.SSL ? cfg.SSL : cfg.Port}`;
   }
 }
 
