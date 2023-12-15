@@ -176,7 +176,7 @@ server.post("/geetest", async (request, reply) => {
     };
     await reply.type("application/json").send(resultdata);
   } else if (gt && challenge && !url) {
-    let link = `${cfg.Address}/geetest`;
+    let link = `${cfg.Address}:${cfg.SSL ? cfg.SSL : cfg.port}/geetest`;
     targetUrl = `${link}?gt=${gt}&challenge=${challenge}`;
     const token = CreateToken(4);
 
@@ -218,10 +218,10 @@ server.post("/updateResult", (request, reply) => {
     const data = {
       retcode: 200,
       data: {
-        gt: gt,
-        challenge: challenge,
-        validate: validate,
-        seccode: seccode,
+        geetest_gt: gt,
+        geetest_challenge: challenge,
+        geetest_validate: validate,
+        geetest_seccode: seccode,
       },
     };
     fs.writeFileSync(filePath, JSON.stringify(data, null, 4));

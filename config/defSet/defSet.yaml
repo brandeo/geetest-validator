@@ -1,8 +1,11 @@
 # 域名或IP(如：http://api.example.com)
 Address: 
 
-# 端口
+# HTTP端口
 Port: 3001
+
+# HTTPS端口(不填则默认使用HTTP端口)
+SSL: 
 
 # 自定义页脚
 copyright: © 2023 Geetest-Manual-Validator
