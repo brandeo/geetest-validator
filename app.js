@@ -161,7 +161,7 @@ server.post("/geetest", async (request, reply) => {
   const user = Object.keys(tokens).find((key) => tokens[key] === token);
 
   if (user && gt && challenge) {
-    console.log(`Token verified for user: ${user}`);
+    // console.log(`Token verified for user: ${user}`);
     let validate = await get_validate(gt, challenge)
     validate = validate.trim();
     const resultdata = {
