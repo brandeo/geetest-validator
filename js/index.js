@@ -117,6 +117,7 @@ window.onload = function () {
       hide(successBtn);
       // 显示开始验证按钮
       show(genBtn);
+      hide(resultBox);
     }
     let randomNum;
     const timestamp = Date.now().toString();
@@ -163,6 +164,21 @@ window.onload = function () {
             return response.json()})
           .then((data) => {
             showToastBox(`验证成功！validate: ${data.data.geetest_validate}`)
+
+              validateInput.value = data.data.geetest_validate;
+              seccodeInput.value = data.data.geetest_validate + '|jordan';
+
+              // 触发获取焦点
+              validateInput.dispatchEvent(new Event("focus"));
+              validateInput.dispatchEvent(new Event("blur"));
+              // 触发失去焦点
+              seccodeInput.dispatchEvent(new Event("focus"));
+              seccodeInput.dispatchEvent(new Event("blur"));
+
+              validateInput.readOnly = true;
+              seccodeInput.readOnly = true;
+              show(resultBox);
+
           })
         showToastBox("正在自动验证 ~ ~ ~");
       })
