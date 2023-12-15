@@ -26,6 +26,7 @@ URL = [
     "http://api.geetest.com/get.php",
     "http://apiv6.geetest.com/ajax.php",
     "http://apiv6.geetest.com/get.php",
+    "http://apiv6.geetest.com/refresh.php"
 ]
     
 
@@ -68,17 +69,6 @@ async def geetest(gt, challenge):
           time.sleep(2)
         # 识别坐标
         zuobiao = Ddddocr().case_demo(fulldata["pic_url"])
-        final_zuobiao = {}
-        formatted_zuobiao = ""
-        for key, value in zuobiao.items():
-           x, y = value
-           final_x = int(round(x / 333.375 *100 * 100, 0))
-           final_y = int(round(y / 333.375 *100 * 100, 0))
-           final_zuobiao[key] = (final_x, final_y)
-           formatted_zuobiao += f"{final_x}_{final_y},"
-        # 去掉最后一个逗号
-        formatted_zuobiao = formatted_zuobiao.rstrip(',')
-        zuobiao = formatted_zuobiao
         fulldata["zuobiao"] = zuobiao
         w = await call_demo_cjs(fulldata["gt"], fulldata["challenge"], fulldata["pic"], fulldata["zuobiao"], fulldata["c"], fulldata["s"])
         fulldata["w"] = w
@@ -86,16 +76,33 @@ async def geetest(gt, challenge):
         # 验证
         params = {"gt": gt, "challenge": challenge, "lang": "zh-cn", "pt": 0, "client_type": "web", "w": fulldata["w"], "callback": "geetest_" + random_num}
         data = fetch(URL[3], params=params, jsonp=True)
-        try:
-              validate = data['data']['validate']
-              print(validate)
-        except KeyError:
-              print("error")
+        # while True:
 
+        if 'validate' in data['data']:
+            validate = data['data']['validate']
+            print(validate)                
+    
         return validate
             
     except requests.exceptions.RequestException as e:
         print(f"发生错误: {e}")
+
+# async def restart_verify(fulldata, url, params):
+#     data = fetch(url=url, params=params, jsonp=True)
+#     fulldata["pic"] = data["data"].get("pic")
+#     fulldata["pic_url"] = "http://" + data['data']['static_servers'][0].rstrip('/')  + data['data'].get("pic")
+#     zuobiao = Ddddocr().case_demo(fulldata["pic_url"])
+#     fulldata["zuobiao"] = zuobiao
+#     w = await call_demo_cjs(fulldata["gt"], fulldata["challenge"], fulldata["pic"], fulldata["zuobiao"], fulldata["c"], fulldata["s"])
+#     fulldata["w"] = w
+# 
+#     params = {"gt": fulldata["gt"], "challenge": fulldata["challenge"], "lang": "zh-cn", "pt": 0, "client_type": "web", "w": fulldata["w"], "callback": "geetest_" + random_num}
+#     data = fetch(URL[3], params=params, jsonp=True)
+# 
+#     if 'validate' in data['data']:
+#         return data['data']['validate']
+#     else:
+#         return data == False
 
 async def call_demo_cjs(gt, challenge, pic, zuobiao, ccc, sss):
         w = ctx.call('get_w', gt, challenge, pic, zuobiao, ccc, sss)
@@ -204,7 +211,7 @@ class Ddddocr:
         img_byte = BytesIO()
         img.save(img_byte, 'png')
         identify_words = self.ocr.classification(img_byte.getvalue())
-        print("1", click_identify_result)
+        # print("1", click_identify_result)
         # words_dict = {}
         # for word in identify_words:
         #     words_dict[word] = click_identify_result.get(word)
@@ -212,8 +219,19 @@ class Ddddocr:
         img_xy = {}
         for key, xy in click_identify_result.items():
             img_xy[key] = (int((xy[0] + xy[2]) / 2), int((xy[1] + xy[3]) / 2))
-        print(img_xy)
-        return(img_xy)
+        final_zuobiao = {}
+        formatted_zuobiao = ""
+        for key, value in img_xy.items():
+           x, y = value
+           final_x = int(round(x / 333.375 *100 * 100, 0))
+           final_y = int(round(y / 333.375 *100 * 100, 0))
+           final_zuobiao[key] = (final_x, final_y)
+           formatted_zuobiao += f"{final_x}_{final_y},"
+        # 去掉最后一个逗号
+        formatted_zuobiao = formatted_zuobiao.rstrip(',')
+
+        print(formatted_zuobiao)
+        return(formatted_zuobiao)
 
 
 

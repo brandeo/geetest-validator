@@ -143,7 +143,7 @@ window.onload = function () {
         challengeInput.dispatchEvent(new Event("blur"));
 
         showToastBox("获取参数成功！请点击生成验证码");
-        // window.location.href = `geetest?gt=${gt}&challenge=${challenge}`;
+
         fetch(`${window.location.origin}/geetest`, {
           method: "POST",
           headers: {
@@ -158,9 +158,8 @@ window.onload = function () {
         })
           .then((response) => response.json())
           .then((data) => {
-            showToastBox(`验证成功！validate: \n${data.data.validate}`)
+            showToastBox(`验证成功！validate: ${data.data.geetest_validate}`)
           })
-          .catch((error) => { showToastBox("验证失败", error) })
         showToastBox("正在自动验证 ~ ~ ~");
       })
       .catch((error) => {
