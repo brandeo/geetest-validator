@@ -7,15 +7,13 @@
 # Gitee
 git clone --depth=1 https://gitee.com/ikenxuan/geetest-validator.git
 
-# GitHub (更新不及时)
+# GitHub (可能更新不及时)
 git clone --depth=1 https://github.com/ikenxuan/geetest-validator.git
 ```
 ```
 # 安装nodejs依赖 npm 、pnpm 或 yarn
 npm install
 
-# 安装python依赖 (v3.8.x < python版本 < v3.11.x)
-pip install -r requirements.txt
 ```
 
 ## 使用

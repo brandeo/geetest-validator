@@ -4,9 +4,11 @@ pnpm.lock
 node_modules/
 data/
 logs/
+cache/
 yarn-error.log
 config/config.yaml
 config/token.yaml
 app.py
 demo.cjs
 test.jpg
+requirements.txt

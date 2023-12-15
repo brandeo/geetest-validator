@@ -27,7 +27,7 @@ let tokens = YAML.parse(
   fs.readFileSync(process.cwd() + "/config/token.yaml", "utf8")
 );
 /** 读取主页 */
-let content = fs.readFileSync("html/index.ejs", "utf8");
+let content = fs.readFileSync("static/html/index.ejs", "utf8");
 
 /** 开鸡！ */
 const server = fastify({
@@ -126,7 +126,7 @@ server.get("/geetest", async (request, reply) => {
     const valid = await verifyToken(token);
     if (valid) {
       // 读取HTML模板文件
-      const template = fs.readFileSync("html/jump.ejs", "utf8");
+      const template = fs.readFileSync("static/html/jump.ejs", "utf8");
       // 使用EJS将targetUrl传递到HTML模板中
 
       reply
@@ -140,7 +140,7 @@ server.get("/geetest", async (request, reply) => {
         );
     } else {
       // Token验证失败的响应
-      const html = fs.readFileSync("html/old_token.ejs", "utf8");
+      const html = fs.readFileSync("static/html/old_token.ejs", "utf8");
       reply
         .code(403)
         .type("text/html")
@@ -345,7 +345,7 @@ async function get_validate(gt, challenge) {
         }
       }
     }
-    const pythonProcess = spawn(pythonCommand, ["app.py", gt, challenge]);
+    const pythonProcess = spawn(pythonCommand, ["cache/app.py", gt, challenge]);
     pythonProcess.stdout.on("data", (data) => {
       outputData += data.toString();
     });
