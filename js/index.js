@@ -156,7 +156,11 @@ window.onload = function () {
             "challenge": data.challenge,
           }, null, 4),
         })
-          .then((response) => response.json())
+          .then((response) => {
+            if (response.status === 500) {
+              showToastBox("验证失败，服务器拒绝响应！")
+            }
+            return response.json()})
           .then((data) => {
             showToastBox(`验证成功！validate: ${data.data.geetest_validate}`)
           })
