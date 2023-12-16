@@ -23,9 +23,9 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 let cfg = YAML.parse(
   fs.readFileSync(process.cwd() + "/config/config.yaml", "utf8")
 );
-let tokens
+let token
 try {
-  YAML.parse(
+  token = YAML.parse(
     fs.readFileSync(process.cwd() + "/config/token.yaml", "utf8")
   );  
 } catch {}
