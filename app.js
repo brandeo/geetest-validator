@@ -23,9 +23,12 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 let cfg = YAML.parse(
   fs.readFileSync(process.cwd() + "/config/config.yaml", "utf8")
 );
-let tokens = YAML.parse(
-  fs.readFileSync(process.cwd() + "/config/token.yaml", "utf8")
-);
+let tokens
+try {
+  YAML.parse(
+    fs.readFileSync(process.cwd() + "/config/token.yaml", "utf8")
+  );  
+} catch {}
 /** 读取主页 */
 let content = fs.readFileSync("static/html/index.ejs", "utf8");
 
