@@ -158,7 +158,7 @@ window.onload = function () {
           }, null, 4),
         })
           .then((response) => {
-            if (response.status === 500) {
+            if (response.status === 401) {
               showToastBox("验证失败，服务器拒绝响应！")
             }
             return response.json()})

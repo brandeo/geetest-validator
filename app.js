@@ -164,6 +164,12 @@ server.post("/geetest", async (request, reply) => {
     // console.log(`Token verified for user: ${user}`);
     let validate = await get_validate(gt, challenge)
     validate = validate.trim();
+    if (validate === "Authentication Failed") {
+      await reply.code(401).type("application/json").send({
+        "geetest_gt": gt,
+        "geetest_challenge": challenge
+      })
+    }
     const resultdata = {
       status: 0,
       message: "OK",
