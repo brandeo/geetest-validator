@@ -9,6 +9,7 @@
       "start": "pm2 start pm2.json",
       "stop": "pm2 stop pm2.json",
       "log": "pm2 log geetest-validator",
+      "restart": "pm2 restart pm2.json",
       "docker-build": "docker build -t media:v1.2 ."
     },
     "author": "",
