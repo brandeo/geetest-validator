@@ -206,7 +206,7 @@ server.post("/geetest", async (request, reply) => {
       },
       geetest: {
         gt: gt,
-        challenge,
+        challenge: challenge,
       },
       e: token,
       verified: false,
