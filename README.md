@@ -13,7 +13,6 @@ git clone --depth=1 https://github.com/ikenxuan/geetest-validator.git
 ```
 # 安装nodejs依赖 npm 、pnpm 或 yarn
 npm install
-
 ```
 
 ## 使用
@@ -56,19 +55,24 @@ npm run log
 **[GET]** 字段 `callback`
 ```
 # 验证地址回调接口
-/geetest?callback={challenge}
+/geetest?callback={e}
 ```
 ```
 # 返回示例
 {
     "retcode": 200,
-    "info": "服务器支持[GET/POST]请求，传入 gt 和 challenge 值即可还原验证码，把 challenge 值传入 callback 字段可进行结果查询"
     "data": {
-        "geetest_gt": "",
-        "geetest_challenge": "",
-        "geetest_validate": "",
-        "geetest_seccode": ""
-    }
+        "geetest_gt": "e52c06c937981b90b275d0aff1d40076",
+        "geetest_challenge": "680ab0b3f4a2b5b97399e3c4eed601ea",
+        "geetest_validate": "94c627a4771c0881d5ccedc436355184",
+        "geetest_seccode": "94c627a4771c0881d5ccedc436355184|jordan"
+    },
+    "geetest": {
+        "gt": "e52c06c937981b90b275d0aff1d40076",
+        "challenge": "680ab0b3f4a2b5b97399e3c4eed601ea"
+    },
+    "e": "Vm14Rk9WQldhejFXdQ==",
+    "verified": true
 }
 ```
 
@@ -80,7 +84,7 @@ npm run log
 ***
 **[POST]** 主页 `/geetest`
 
-* `url` 的返回值 `data.token` 为 **[GET]** 字段 `e` 的值<br><br>
+**`body.url`**
 
 *请求示例*
 ```
@@ -89,20 +93,20 @@ npm run log
     "url": "https://api.example.com/geetest?gt={gt}&challenge={challenge}"
 }
 ```
-*返回示例*
+*请求示例*
 ```
 # Body
 {
     "status": 0,
     "message": "OK",
     "data": {
-      "token": "Ug5b"
+        "token": "VlROak9WQlhXVDEyOQ=="
     }
 }
 ```
 <br>
 
-* `gt` 和 `challenge` 的返回值 `data.link` 和 `data.result` 分别为短链地址与验证地址回调<br><br>
+**`body.gt` 和 `body.challenge`**
 
 *请求示例*
 ```
@@ -119,19 +123,25 @@ npm run log
     "status": 0,
     "message": "OK",
     "data": {
-        "link": "https://api.example.com/geetest?e=Ug5b",
-        "result": "https://api.example.com/geetest?callback=dc45e58c3874cc247a8d8e8ff34839af"
-    }
+        "link": "http://api.example.com/geetest?e=VjJ4Rk9WQldTVDFtYQ==",
+        "result": "http://api.example.com/geetest?callback=VjJ4Rk9WQldTVDFtYQ=="
+    },
+    "geetest": {
+        "gt": "3101554dd48afd3d07e93bd872d4492c",
+        "challenge": "916e8df0d7d53a2cbd538a422ed68ff0"
+    },
+    "e": "VjJ4Rk9WQldTVDFtYQ==",
+    "verified": false
 }
 ```
 
 ## UI样式
-<img src="img/demo1.png" width="500" alt="主页">
-<img src="img/demo2.png" width="500" alt="输入验证信息">
-<img src="img/demo3.png" width="500" alt="开始验证">
-<img src="img/demo4.png" width="500" alt="自动提交验证结果到回调接口">
-<img src="img/demo5.png" width="500" alt="短链地址过期提示">
-<img src="img/demo6.png" width="500" alt="验证码中间页">
+<img src="static/img/demo1.png" width="500" alt="主页">
+<img src="static/img/demo2.png" width="500" alt="输入验证信息">
+<img src="static/img/demo3.png" width="500" alt="开始验证">
+<img src="static/img/demo4.png" width="500" alt="自动提交验证结果到回调接口">
+<img src="static/img/demo5.png" width="500" alt="短链地址过期提示">
+<img src="static/img/demo6.png" width="500" alt="验证码中间页">
 
 ## 参考
 https://github.com/Colter23/geetest-validator<br>
