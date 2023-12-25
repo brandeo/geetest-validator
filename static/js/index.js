@@ -70,7 +70,7 @@ window.onload = function () {
                   method: "POST",
                   headers: {
                     "Content-Type": "application/json",
-                    "Force-Write": "true"
+                    "Force-Write": "true",
                   },
                   body: JSON.stringify({
                     gt,
@@ -78,13 +78,13 @@ window.onload = function () {
                     validate,
                     seccode,
                     verified: true,
-                    e: localStorage.getItem("e")
+                    e: localStorage.getItem("e") || CreateToken(4),
                   }),
                 }).then(() => {
-                  localStorage.removeItem('gt');
-                  localStorage.removeItem('challenge');
-                  localStorage.removeItem('e')
-              });
+                  localStorage.removeItem("gt");
+                  localStorage.removeItem("challenge");
+                  localStorage.removeItem("e");
+                });
               } catch (err) {
                 console.log(err);
               }
@@ -111,7 +111,7 @@ window.onload = function () {
 
   testBtn.onclick = (e) => {
     const currentUrl = window.location.href;
-    if (currentUrl.includes('?')) {
+    if (currentUrl.includes("?")) {
       window.location.href = `${window.location.origin}/geetest`;
       return;
     }
@@ -170,21 +170,21 @@ window.onload = function () {
         //     return response.json()})
         //   .then((data) => {
         //     showToastBox(`验证成功！validate: ${data.data.geetest_validate}`)
-// 
+        //
         //       validateInput.value = data.data.geetest_validate;
         //       seccodeInput.value = data.data.geetest_validate + '|jordan';
-// 
+        //
         //       // 触发获取焦点
         //       validateInput.dispatchEvent(new Event("focus"));
         //       validateInput.dispatchEvent(new Event("blur"));
         //       // 触发失去焦点
         //       seccodeInput.dispatchEvent(new Event("focus"));
         //       seccodeInput.dispatchEvent(new Event("blur"));
-// 
+        //
         //       validateInput.readOnly = true;
         //       seccodeInput.readOnly = true;
         //       show(resultBox);
-// 
+        //
         //   })
         // showToastBox("正在自动验证 ~ ~ ~");
       })
@@ -297,5 +297,35 @@ window.onload = function () {
 
   function show(el) {
     el.classList.remove("hide");
+  }
+  const tokenMap = {};
+  function CreateToken(len) {
+    let _charStr =
+        "abacdefghjklmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ0123456789",
+      min = 0,
+      max = _charStr.length - 1,
+      _str = ""; //定义随机字符串 变量
+    //判断是否指定长度，否则默认长度为15
+    len = len || 15;
+    //循环生成字符串
+    for (var i = 0, index; i < len; i++) {
+      index = (function (randomIndexFunc, i) {
+        return randomIndexFunc(min, max, i, randomIndexFunc);
+      })(function (min, max, i, _self) {
+        let indexTemp = Math.floor(Math.random() * (max - min + 1) + min),
+          numStart = _charStr.length - 10;
+        if (i == 0 && indexTemp >= numStart) {
+          indexTemp = _self(min, max, i, _self);
+        }
+        return indexTemp;
+      }, i);
+      _str += _charStr[index];
+      _str = btoa(_str);
+    }
+    tokenMap[_str] = {
+      createTime: Date.now(),
+    };
+
+    return _str;
   }
 };
