@@ -73,12 +73,9 @@ window.onload = function () {
                     "Force-Write": "true",
                   },
                   body: JSON.stringify({
-                    gt,
-                    challenge,
-                    validate,
-                    seccode,
                     verified: true,
                     e: localStorage.getItem("e") || CreateToken(4),
+                    res: { gt, challenge, validate, seccode },
                   }),
                 }).then(() => {
                   localStorage.removeItem("gt");
@@ -136,6 +133,10 @@ window.onload = function () {
     /** https://www.geetest.com/demo/gt/register-slide 滑块验证*/
     const baseUrl = "https://www.geetest.com/demo/gt/register-fullpage";
     const url = `${baseUrl}?t=${randomNum}`;
+    challengeInput.value = ''
+    challengeInput.dispatchEvent(new Event("focus"));
+    challengeInput.dispatchEvent(new Event("blur"));
+
     fetch(url)
       .then((response) => response.json())
       .then((data) => {

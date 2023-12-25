@@ -232,7 +232,7 @@ server.post("/geetest", async (request, reply) => {
 // 接收 challenge 和 seccode 参数
 // 读取文件 - 更新数据 - 写入文件
 server.post("/updateResult", (request, reply) => {
-  const { gt, challenge, validate, seccode ,e, verified } = request.body;
+  const { res ,e, verified } = request.body;
   const headers = request.headers;
   const filePath = `./data/${e}.json`;
 
@@ -241,14 +241,14 @@ server.post("/updateResult", (request, reply) => {
     const updatedData = {
       retcode: 200,
       data: {
-          geetest_gt: gt,
-          geetest_challenge: challenge,
-          geetest_validate: validate,
-          geetest_seccode: seccode,
+          geetest_gt: res.gt,
+          geetest_challenge: res.challenge,
+          geetest_validate: res.validate,
+          geetest_seccode: res.seccode,
       },
       geetest: {
-        gt: gt,
-        challenge: challenge
+        gt: res.gt,
+        challenge: res.challenge
       },
       e: e,  // 保留原有的 token 字段
       verified: verified,
