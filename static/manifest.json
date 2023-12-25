@@ -1,0 +1,26 @@
+{
+  "name": "HackerWeb",
+  "short_name": "HackerWeb",
+  "start_url": "/geetest",
+  "id": "/geetest",
+  "display": "standalone",
+  "background_color": "#fff",
+  "description": "A simply readable Hacker News app.",
+  "icons": [
+    {
+      "src": "/static/ico.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/static/img/1.png",
+      "sizes": "2560x1331",
+      "type": "image/png",
+      "platform": "web"
+    }
+  ],
+  "related_applications": [],
+  "form_factor": "wide"
+}

@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="Shortcut Icon" href="static/Geetest.png" type="image/x-icon" />
     <title>验证码页面</title>
-
+    <link rel="manifest" href="/static/manifest.json">
+    <meta name="theme-color" content="#ffffff">
     <link href="static/css/style.css" rel="stylesheet" type="text/css" />
     <link href="static/css/Jiro.css" rel="stylesheet" type="text/css" />
     <link href="static/css/canvas.css" rel="stylesheet" type="text/css" />
@@ -32,8 +33,6 @@
             challengeInput.focus();
             challengeInput.blur();
           } else {}
-
-          console.log({ gtValue, challengeValue });
         }, 100);
       });
     </script>
