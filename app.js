@@ -114,7 +114,9 @@ server.get("/geetest", async (request, reply) => {
     try {
       /** 返回valite等参数 */
       const content = fs.readFileSync(filePath, "utf8");
-      reply.type("application/json").send(content);
+      const data = JSON.parse(content)
+      if (!data.verified) data.data = undefined
+      reply.type("application/json").send(data);
     } catch (err) {
       reply.type("application/json").send({
         retcode: 204,
@@ -128,6 +130,9 @@ server.get("/geetest", async (request, reply) => {
     const token = request.query.e;
     const valid = await verifyToken(token);
     if (valid) {
+      // 读取data
+      const data = JSON.parse(fs.readFileSync(path.join(__dirname, "data", `${token}.json`), "utf8"));
+
       // 读取HTML模板文件
       const template = fs.readFileSync("static/html/jump.ejs", "utf8");
       // 使用EJS将targetUrl传递到HTML模板中
@@ -139,6 +144,8 @@ server.get("/geetest", async (request, reply) => {
           ejs.render(template, {
             targetUrl: targetUrl,
             copyright: cfg.copyright,
+            gt: data.geetest.gt,
+            challenge: data.geetest.challenge,
           })
         );
     } else {
@@ -195,9 +202,16 @@ server.post("/geetest", async (request, reply) => {
       message: "OK",
       data: {
         link: `${link}?e=${token}`,
-        result: `${link}?callback=${challenge}`,
+        result: `${link}?callback=${token}`,
       },
+      geetest: {
+        gt: gt,
+        challenge,
+      },
+      e: token,
+      verified: false,
     };
+    fs.writeFileSync(`./data/${token}.json`, JSON.stringify(resultdata, null, 4))
     reply.type("application/json").send(resultdata);
   }
 
@@ -218,40 +232,33 @@ server.post("/geetest", async (request, reply) => {
 // 接收 challenge 和 seccode 参数
 // 读取文件 - 更新数据 - 写入文件
 server.post("/updateResult", (request, reply) => {
-  const { gt, challenge, validate, seccode } = request.body;
+  const { gt, challenge, validate, seccode ,e, verified } = request.body;
   const headers = request.headers;
-  const filePath = `./data/${challenge}.json`;
+  const filePath = `./data/${e}.json`;
 
   // 接受强制写入
   if (headers["force-write"]) {
-    const data = {
+    const updatedData = {
       retcode: 200,
       data: {
-        geetest_gt: gt,
-        geetest_challenge: challenge,
-        geetest_validate: validate,
-        geetest_seccode: seccode,
+          geetest_gt: gt,
+          geetest_challenge: challenge,
+          geetest_validate: validate,
+          geetest_seccode: seccode,
       },
-    };
-    fs.writeFileSync(filePath, JSON.stringify(data, null, 4));
+      geetest: {
+        gt: gt,
+        challenge: challenge
+      },
+      e: e,  // 保留原有的 token 字段
+      verified: verified,
+  };
+      fs.writeFileSync(filePath, JSON.stringify(updatedData, null, 4));
     return true;
   }
 
   // 读取原文件
-  let data = fs.readFileSync(filePath, "utf8");
-  data = JSON.parse(data);
-
-  // 初始化data
-  if (!data.data) {
-    data.data = {};
-  }
-  // 更新数据
-  data.retcode = 200;
-  data.data.geetest_gt = gt;
-  data.data.geetest_challenge = challenge;
-  data.data.geetest_validate = validate;
-  data.data.geetest_seccode = seccode;
-
+  let data = JSON.parse(fs.readFileSync(filePath, "utf8"));
   // 保存文件
   fs.writeFileSync(filePath, JSON.stringify(data, null, 4));
   reply.send(data);

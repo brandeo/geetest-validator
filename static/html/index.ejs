@@ -1,100 +1,151 @@
 <!DOCTYPE html>
 <html lang="zh_CN">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="Shortcut Icon" href="static/Geetest.png" type="image/x-icon" />
     <title>验证码页面</title>
 
-    <link href="static/css/style.css" rel="stylesheet" type="text/css">
-    <link href="static/css/Jiro.css" rel="stylesheet" type="text/css">
-    <link href="static/css/canvas.css" rel="stylesheet" type="text/css">
+    <link href="static/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="static/css/Jiro.css" rel="stylesheet" type="text/css" />
+    <link href="static/css/canvas.css" rel="stylesheet" type="text/css" />
 
     <script src="static/js/gt.js"></script>
     <script src="static/js/index.js"></script>
-</head>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        setTimeout(function () {
+          const gtValue = localStorage.getItem("gt");
+          const challengeValue = localStorage.getItem("challenge");
+          
+          const gtInput = document.getElementById("gt");
+          const challengeInput = document.getElementById("challenge");
 
-<body>
+          if (gtInput && challengeInput) {
+            gtInput.value = gtValue;
+            challengeInput.value = challengeValue;
+
+            // 触发获取焦点和失去焦点事件，以触发动画效果
+            gtInput.focus();
+            gtInput.blur();
+            challengeInput.focus();
+            challengeInput.blur();
+          } else {}
+
+          console.log({ gtValue, challengeValue });
+        }, 100);
+      });
+    </script>
+  </head>
+
+  <body>
     <section class="canvas-wrap">
-        <div class="canvas-content">
-            <div id="canvas">
-                <div class="box">
-                    <div class="title">验证码</div>
+      <div class="canvas-content">
+        <div id="canvas">
+          <div class="box">
+            <div class="title">验证码</div>
 
-                    <div class="container">
-                        <section class="content bgcolor-7">
-                            <span class="input input--jiro">
-                                <input class="input__field input__field--jiro" type="text" id="gt">
-                                <label class="input__label input__label--jiro" for="input-10">
-                                    <span class="input__label-content input__label-content--jiro">GT</span>
-                                </label>
-                            </span>
-                            <span class="input input--jiro">
-                                <input class="input__field input__field--jiro" type="text" id="challenge">
-                                <label class="input__label input__label--jiro" for="input-11">
-                                    <span class="input__label-content input__label-content--jiro">CHALLENGE</span>
-                                </label>
-                            </span>
-                        </section>
-                    </div>
-                    <div class="btn-spacer"></div>
-                    <div id="captcha">
-                        <div id="gen" class="btn">生成验证码</div>
-                        <div id="success" class="btn hide">验证成功</div>
-                        <div id="wait" class="hide">
-                            <div class="loading">
-                                <div class="loading-dot"></div>
-                                <div class="loading-dot"></div>
-                                <div class="loading-dot"></div>
-                                <div class="loading-dot"></div>
-                            </div>
-                        </div>
-                        <div class="btn-spacer"></div>
-                        <div id="captcha">
-                            <div id="online-test" class="online-btn">在线测试（获取参数）</div>
-                            <div id="success" class="online-btn hide">验证成功</div>
-                            <div id="wait" class="online-hide">
-                                <div class="loading">
-                                    <div class="loading-dot"></div>
-                                    <div class="loading-dot"></div>
-                                    <div class="loading-dot"></div>
-                                    <div class="loading-dot"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="result" class="hide">
-                        <div class="result-title">验证结果</div>
-                        <div class="container">
-                            <section class="content bgcolor-7">
-                                <span class="input input--jiro">
-                                    <input class="input__field input__field--jiro" style="display: block;" type="text"
-                                        id="validate">
-                                    <label class="input__label input__label--jiro">
-                                        <span class="input__label-content input__label-content--jiro">VALIDATE</span>
-                                    </label>
-                                </span>
-                                <span class="input input--jiro">
-                                    <input class="input__field input__field--jiro" style="display: block;" type="text"
-                                        id="seccode">
-                                    <label class="input__label input__label--jiro">
-                                        <span class="input__label-content input__label-content--jiro">SECCODE</span>
-                                    </label>
-                                </span>
-                            </section>
-                        </div>
-                        <div class="btn" id="result-btn">复制结果</div>
-                    </div>
-                </div>
-                <footer id="footer">
-                    <p class="copyright">
-                        <%= copyright %>
-                    </p>
-                </footer>
+            <div class="container">
+              <section class="content bgcolor-7">
+                <span class="input input--jiro">
+                  <input
+                    class="input__field input__field--jiro"
+                    type="text"
+                    id="gt"
+                  />
+                  <label class="input__label input__label--jiro" for="input-10">
+                    <span
+                      class="input__label-content input__label-content--jiro"
+                      >GT</span
+                    >
+                  </label>
+                </span>
+                <span class="input input--jiro">
+                  <input
+                    class="input__field input__field--jiro"
+                    type="text"
+                    id="challenge"
+                  />
+                  <label class="input__label input__label--jiro" for="input-11">
+                    <span
+                      class="input__label-content input__label-content--jiro"
+                      >CHALLENGE</span
+                    >
+                  </label>
+                </span>
+              </section>
             </div>
+            <div class="btn-spacer"></div>
+            <div id="captcha">
+              <div id="gen" class="btn">生成验证码</div>
+              <div id="success" class="btn hide">验证成功</div>
+              <div id="wait" class="hide">
+                <div class="loading">
+                  <div class="loading-dot"></div>
+                  <div class="loading-dot"></div>
+                  <div class="loading-dot"></div>
+                  <div class="loading-dot"></div>
+                </div>
+              </div>
+              <div class="btn-spacer"></div>
+              <div id="captcha">
+                <div id="online-test" class="online-btn">
+                  在线测试（获取参数）
+                </div>
+                <div id="success" class="online-btn hide">验证成功</div>
+                <div id="wait" class="online-hide">
+                  <div class="loading">
+                    <div class="loading-dot"></div>
+                    <div class="loading-dot"></div>
+                    <div class="loading-dot"></div>
+                    <div class="loading-dot"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="result" class="hide">
+              <div class="result-title">验证结果</div>
+              <div class="container">
+                <section class="content bgcolor-7">
+                  <span class="input input--jiro">
+                    <input
+                      class="input__field input__field--jiro"
+                      style="display: block"
+                      type="text"
+                      id="validate"
+                    />
+                    <label class="input__label input__label--jiro">
+                      <span
+                        class="input__label-content input__label-content--jiro"
+                        >VALIDATE</span
+                      >
+                    </label>
+                  </span>
+                  <span class="input input--jiro">
+                    <input
+                      class="input__field input__field--jiro"
+                      style="display: block"
+                      type="text"
+                      id="seccode"
+                    />
+                    <label class="input__label input__label--jiro">
+                      <span
+                        class="input__label-content input__label-content--jiro"
+                        >SECCODE</span
+                      >
+                    </label>
+                  </span>
+                </section>
+              </div>
+              <div class="btn" id="result-btn">复制结果</div>
+            </div>
+          </div>
+          <footer id="footer">
+            <p class="copyright"><%= copyright %></p>
+          </footer>
         </div>
+      </div>
     </section>
     <div class="toast-box"></div>
     <script src="//apps.bdimg.com/libs/jquery/1.9.1/jquery.js"></script>
@@ -104,41 +155,41 @@
     <script src="static/js/JoanClaret/3d-lines-animation.js"></script>
     <script src="static/js/classie.js"></script>
     <script>
-        (function () {
-            // trim polyfill : https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/Trim
-            if (!String.prototype.trim) {
-                (function () {
-                    // Make sure we trim BOM and NBSP
-                    var rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
-                    String.prototype.trim = function () {
-                        return this.replace(rtrim, '');
-                    };
-                })();
+      (function () {
+        // trim polyfill : https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/Trim
+        if (!String.prototype.trim) {
+          (function () {
+            // Make sure we trim BOM and NBSP
+            var rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
+            String.prototype.trim = function () {
+              return this.replace(rtrim, "");
+            };
+          })();
+        }
+
+        [].slice
+          .call(document.querySelectorAll("input.input__field"))
+          .forEach(function (inputEl) {
+            // in case the input is already filled..
+            if (inputEl.value.trim() !== "") {
+              classie.add(inputEl.parentNode, "input--filled");
             }
 
-            [].slice.call(document.querySelectorAll('input.input__field')).forEach(function (inputEl) {
-                // in case the input is already filled..
-                if (inputEl.value.trim() !== '') {
-                    classie.add(inputEl.parentNode, 'input--filled');
-                }
+            // events:
+            inputEl.addEventListener("focus", onInputFocus);
+            inputEl.addEventListener("blur", onInputBlur);
+          });
 
-                // events:
-                inputEl.addEventListener('focus', onInputFocus);
-                inputEl.addEventListener('blur', onInputBlur);
-            });
+        function onInputFocus(ev) {
+          classie.add(ev.target.parentNode, "input--filled");
+        }
 
-            function onInputFocus(ev) {
-                classie.add(ev.target.parentNode, 'input--filled');
-            }
-
-            function onInputBlur(ev) {
-                if (ev.target.value.trim() === '') {
-                    classie.remove(ev.target.parentNode, 'input--filled');
-                }
-            }
-        })();
+        function onInputBlur(ev) {
+          if (ev.target.value.trim() === "") {
+            classie.remove(ev.target.parentNode, "input--filled");
+          }
+        }
+      })();
     </script>
-
-</body>
-
+  </body>
 </html>

@@ -77,8 +77,14 @@ window.onload = function () {
                     challenge,
                     validate,
                     seccode,
+                    verified: true,
+                    e: localStorage.getItem("e")
                   }),
-                });
+                }).then(() => {
+                  localStorage.removeItem('gt');
+                  localStorage.removeItem('challenge');
+                  localStorage.removeItem('e')
+              });
               } catch (err) {
                 console.log(err);
               }
@@ -128,7 +134,7 @@ window.onload = function () {
     /** https://www.geetest.com/demo/gt/register-icon 图案点选 */
     /** https://www.geetest.com/demo/gt/register-click 文字点选 */
     /** https://www.geetest.com/demo/gt/register-slide 滑块验证*/
-    const baseUrl = "https://www.geetest.com/demo/gt/register-icon";
+    const baseUrl = "https://www.geetest.com/demo/gt/register-fullpage";
     const url = `${baseUrl}?t=${randomNum}`;
     fetch(url)
       .then((response) => response.json())
@@ -145,42 +151,42 @@ window.onload = function () {
 
         showToastBox("获取参数成功！请点击生成验证码");
 
-        fetch(`${window.location.origin}/geetest`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Force-Write": "true",
-            "authorization": "verification"
-          },
-          body: JSON.stringify({
-            "gt": data.gt,
-            "challenge": data.challenge,
-          }, null, 4),
-        })
-          .then((response) => {
-            if (response.status === 401) {
-              showToastBox("验证失败，服务器拒绝响应！")
-            }
-            return response.json()})
-          .then((data) => {
-            showToastBox(`验证成功！validate: ${data.data.geetest_validate}`)
-
-              validateInput.value = data.data.geetest_validate;
-              seccodeInput.value = data.data.geetest_validate + '|jordan';
-
-              // 触发获取焦点
-              validateInput.dispatchEvent(new Event("focus"));
-              validateInput.dispatchEvent(new Event("blur"));
-              // 触发失去焦点
-              seccodeInput.dispatchEvent(new Event("focus"));
-              seccodeInput.dispatchEvent(new Event("blur"));
-
-              validateInput.readOnly = true;
-              seccodeInput.readOnly = true;
-              show(resultBox);
-
-          })
-        showToastBox("正在自动验证 ~ ~ ~");
+        // fetch(`${window.location.origin}/geetest`, {
+        //   method: "POST",
+        //   headers: {
+        //     "Content-Type": "application/json",
+        //     "Force-Write": "true",
+        //     "authorization": "verification"
+        //   },
+        //   body: JSON.stringify({
+        //     "gt": data.gt,
+        //     "challenge": data.challenge,
+        //   }, null, 4),
+        // })
+        //   .then((response) => {
+        //     if (response.status === 401) {
+        //       showToastBox("验证失败，服务器拒绝响应！")
+        //     }
+        //     return response.json()})
+        //   .then((data) => {
+        //     showToastBox(`验证成功！validate: ${data.data.geetest_validate}`)
+// 
+        //       validateInput.value = data.data.geetest_validate;
+        //       seccodeInput.value = data.data.geetest_validate + '|jordan';
+// 
+        //       // 触发获取焦点
+        //       validateInput.dispatchEvent(new Event("focus"));
+        //       validateInput.dispatchEvent(new Event("blur"));
+        //       // 触发失去焦点
+        //       seccodeInput.dispatchEvent(new Event("focus"));
+        //       seccodeInput.dispatchEvent(new Event("blur"));
+// 
+        //       validateInput.readOnly = true;
+        //       seccodeInput.readOnly = true;
+        //       show(resultBox);
+// 
+        //   })
+        // showToastBox("正在自动验证 ~ ~ ~");
       })
       .catch((error) => {
         showToastBox("获取gt和challenge失败", error);
