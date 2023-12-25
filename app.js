@@ -7,7 +7,7 @@ import { dirname, join } from "path";
 import { spawn } from "child_process";
 import fs from "fs";
 import path from "path";
-import ejs from "ejs";
+import artTemplate from "art-template";
 import YAML from "yaml";
 
 /** 初始化配置文件 */
@@ -30,7 +30,7 @@ try {
   );  
 } catch {}
 /** 读取主页 */
-let content = fs.readFileSync("static/html/index.ejs", "utf8");
+let content = fs.readFileSync("static/html/index.html", "utf8");
 
 /** 开鸡！ */
 const server = fastify({
@@ -54,12 +54,6 @@ server.listen(
 server.register(fastifyStatic, {
   root: join(__dirname),
   prefix: "/",
-});
-/** 注册ejs模板引擎 */
-server.register(Template, {
-  engine: {
-    ejs: ejs,
-  },
 });
 
 /** 主页 */
@@ -102,7 +96,7 @@ server.get("/geetest", async (request, reply) => {
     } else {
       reply
         .type("text/html")
-        .send(ejs.render(content, { copyright: cfg.copyright }));
+        .send(artTemplate.render(content, { copyright: cfg.copyright }));
     }
   }
 
@@ -134,15 +128,13 @@ server.get("/geetest", async (request, reply) => {
       const data = JSON.parse(fs.readFileSync(path.join(__dirname, "data", `${token}.json`), "utf8"));
 
       // 读取HTML模板文件
-      const template = fs.readFileSync("static/html/jump.ejs", "utf8");
-      // 使用EJS将targetUrl传递到HTML模板中
+      const template = fs.readFileSync("static/html/jump.html", "utf8");
 
       reply
         .code(200)
         .type("text/html")
         .send(
-          ejs.render(template, {
-            targetUrl: targetUrl,
+          artTemplate.render(template, {
             copyright: cfg.copyright,
             gt: data.geetest.gt,
             challenge: data.geetest.challenge,
@@ -150,17 +142,17 @@ server.get("/geetest", async (request, reply) => {
         );
     } else {
       // Token验证失败的响应
-      const html = fs.readFileSync("static/html/old_token.ejs", "utf8");
+      const html = fs.readFileSync("static/html/old_token.html", "utf8");
       reply
         .code(403)
         .type("text/html")
-        .send(ejs.render(html, { copyright: cfg.copyright }));
+        .send(artTemplate.render(html, { copyright: cfg.copyright }));
     }
   }
 
   reply
     .type("text/html")
-    .send(ejs.render(content, { copyright: cfg.copyright }));
+    .send(artTemplate.render(content, { copyright: cfg.copyright }));
 });
 
 let targetUrl;

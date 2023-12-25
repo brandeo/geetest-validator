@@ -64,9 +64,8 @@ window.onload = function () {
                 const challenge = challengeInput.value;
                 const seccode = seccodeInput.value;
                 const validate = validateInput.value;
-                const serverUrl = window.location.origin;
                 // 调用接口发送参数
-                fetch(`${serverUrl}/updateResult`, {
+                fetch(`${window.location.origin}/updateResult`, {
                   method: "POST",
                   headers: {
                     "Content-Type": "application/json",
@@ -93,6 +92,7 @@ window.onload = function () {
                 successBtn.setAttribute("data-status", "success");
               }
               show(resultBox);
+              
             })
             .onError((err) => {
               showToastBox("验证失败 " + err.msg, 3000);
