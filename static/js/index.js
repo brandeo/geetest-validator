@@ -302,7 +302,7 @@ window.onload = function () {
   const tokenMap = {};
   function CreateToken(len) {
     let _charStr =
-        "abacdefghjklmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ0123456789",
+        "ABCDEFGHJKLMNOPQRSTUVWXYZ0123456789",
       min = 0,
       max = _charStr.length - 1,
       _str = ""; //定义随机字符串 变量
@@ -321,7 +321,7 @@ window.onload = function () {
         return indexTemp;
       }, i);
       _str += _charStr[index];
-      _str = btoa(_str);
+      _str =  encodeURIComponent(btoa(_str));
     }
     tokenMap[_str] = {
       createTime: Date.now(),
