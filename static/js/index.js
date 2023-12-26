@@ -321,12 +321,12 @@ window.onload = function () {
         return indexTemp;
       }, i);
       _str += _charStr[index];
-      _str =  encodeURIComponent(btoa(_str));
+      _str =  btoa(_str);
     }
     tokenMap[_str] = {
       createTime: Date.now(),
     };
 
-    return _str;
+    return encodeURIComponent(_str);
   }
 };

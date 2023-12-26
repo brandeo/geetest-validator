@@ -125,7 +125,7 @@ server.get("/geetest", async (request, reply) => {
     const valid = await verifyToken(token);
     if (valid) {
       // 读取data
-      const data = JSON.parse(fs.readFileSync(path.join(__dirname, "data", `${token}.json`), "utf8"));
+      const data = JSON.parse(fs.readFileSync(path.join(__dirname, "data", `${encodeURIComponent(token)}.json`), "utf8"));
 
       // 读取HTML模板文件
       const template = fs.readFileSync("static/html/jump.html", "utf8");
@@ -187,6 +187,7 @@ server.post("/geetest", async (request, reply) => {
     let link = `${cfg.Address}:${cfg.SSL ? cfg.SSL : cfg.Port}/geetest`;
     targetUrl = `${link}?gt=${gt}&challenge=${challenge}`;
     const token = CreateToken(4);
+    console.log(token)
 
     /** 通过challenge参数保存文件 */
     const resultdata = {
@@ -278,13 +279,13 @@ function CreateToken(len) {
       return indexTemp;
     }, i);
     _str += _charStr[index];
-    _str = encodeURIComponent(btoa(_str));
+    _str = btoa(_str);
   }
   tokenMap[_str] = {
     createTime: Date.now(),
   };
 
-  return _str;
+  return encodeURIComponent(_str);
 }
 
 /** 验证token有效性 */
