@@ -187,7 +187,6 @@ server.post("/geetest", async (request, reply) => {
     let link = `${cfg.Address}:${cfg.SSL ? cfg.SSL : cfg.Port}/geetest`;
     targetUrl = `${link}?gt=${gt}&challenge=${challenge}`;
     const token = CreateToken(4);
-    console.log(token)
 
     /** 通过challenge参数保存文件 */
     const resultdata = {
