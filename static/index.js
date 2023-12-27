@@ -56,9 +56,14 @@ export async function Server() {
     prefix: "/static",
   });
 
+  server.get("/", async (request, reply) => {
+    /** 禁止访问根页面，302重定向到/geetest */
+    reply.redirect(302, "/geetest");
+  });
+
   /** 主页 */
   server.get("/geetest", async (request, reply) => {
-    //获取query参数
+    /** 获取url参数 */
     const { gt, challenge, callback, e } = request.query;
 
     /** 填入参数 */
@@ -124,7 +129,7 @@ export async function Server() {
       const token = request.query.e;
       const valid = await verifyToken(token);
       if (valid) {
-        // 读取data
+        /** 读取data */
         const data = JSON.parse(
           fs.readFileSync(
             path.join(__dirname, "data", `${encodeURIComponent(token)}.json`),
@@ -132,7 +137,7 @@ export async function Server() {
           )
         );
 
-        // 读取HTML模板文件
+        /** 读取HTML模板文件 */
         const template = fs.readFileSync("static/html/jump.html", "utf8");
 
         reply
@@ -146,7 +151,7 @@ export async function Server() {
             })
           );
       } else {
-        // Token验证失败的响应
+        /** e验证失败的响应 */
         const html = fs.readFileSync("static/html/old_token.html", "utf8");
         reply
           .code(403)
@@ -229,14 +234,13 @@ export async function Server() {
     }
   });
 
-  // 接收 challenge 和 seccode 参数
-  // 读取文件 - 更新数据 - 写入文件
+  /** 读取文件 - 更新数据 - 写入文件 */
   server.post("/updateResult", (request, reply) => {
     const { res, e, verified } = request.body;
     const headers = request.headers;
     const filePath = `./data/${e}.json`;
 
-    // 接受强制写入
+    /** 接受强制写入 */
     if (headers["force-write"]) {
       const updatedData = {
         retcode: 200,
@@ -250,16 +254,16 @@ export async function Server() {
           gt: res.gt,
           challenge: res.challenge,
         },
-        e: e, // 保留原有的 token 字段
+        e: e,
         verified: verified,
       };
       fs.writeFileSync(filePath, JSON.stringify(updatedData, null, 4));
       return true;
     }
 
-    // 读取原文件
+    /** 读取原文件 */
     let data = JSON.parse(fs.readFileSync(filePath, "utf8"));
-    // 保存文件
+    /** 保存文件 */
     fs.writeFileSync(filePath, JSON.stringify(data, null, 4));
     reply.send(data);
   });
@@ -269,10 +273,10 @@ export async function Server() {
     let _charStr = "ABCDEFGHJKLMNOPQRSTUVWXYZ0123456789",
       min = 0,
       max = _charStr.length - 1,
-      _str = ""; //定义随机字符串 变量
-    //判断是否指定长度，否则默认长度为15
+      _str = ""; /** 定义随机字符串 变量 */
+     /** 判断是否指定长度，否则默认长度为15 */
     len = len || 15;
-    //循环生成字符串
+    /** 循环生成字符串 */
     for (var i = 0, index; i < len; i++) {
       index = (function (randomIndexFunc, i) {
         return randomIndexFunc(min, max, i, randomIndexFunc);
@@ -300,12 +304,15 @@ export async function Server() {
     const tokenData = tokenMap[token];
 
     if (!tokenData || now - tokenData.createTime > 240 * 1000) {
-      return false; //不存在则无效
+      /** 不存在或过期则无效 */
+      return false; 
     }
 
-    return true; //有效
+    /** 有效 */
+    return true;
   }
 
+  /** 读取配置文件 */
   async function GetIP() {
     if (cfg.Address !== "") {
       return `${cfg.Address}:${cfg.SSL ? cfg.SSL : cfg.Port}`;
