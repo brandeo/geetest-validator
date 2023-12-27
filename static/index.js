@@ -94,7 +94,7 @@ export async function Server() {
         info: "服务器支持[GET/POST]请求，传入 gt 和 challenge 值即可还原验证码，把 challenge 值传入 callback 字段可进行结果查询",
       };
       const fileName = `${challenge}.json`;
-      const filePath = path.join(__dirname, "data", fileName);
+      const filePath = path.join(__dirname, "..", "data", fileName);
       fs.writeFileSync(filePath, JSON.stringify(data, null, 4));
       if (request.headers["accept"] === "application/json") {
         reply.type("application/json").send(fileName);
@@ -108,7 +108,7 @@ export async function Server() {
     /** 回调地址 */
     if (callback) {
       const fileName = `${callback}.json`;
-      const filePath = path.join(__dirname, "data", fileName);
+      const filePath = path.join(__dirname, "..", "data", fileName);
 
       try {
         /** 返回valite等参数 */
@@ -132,7 +132,7 @@ export async function Server() {
         /** 读取data */
         const data = JSON.parse(
           fs.readFileSync(
-            path.join(__dirname, "data", `${encodeURIComponent(token)}.json`),
+            path.join(__dirname, "..", "data", `${encodeURIComponent(token)}.json`),
             "utf8"
           )
         );
