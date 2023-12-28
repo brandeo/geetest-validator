@@ -1,6 +1,7 @@
 import { publicIpv4, publicIpv6 } from "public-ip";
 import fastify from "fastify";
 import fastifyStatic from "@fastify/static";
+import fastifyMultipart from "@fastify/multipart";
 import fastifyFormBody from "@fastify/formbody"
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
@@ -57,6 +58,7 @@ export async function Server() {
     root: join(__dirname),
     prefix: "/static",
   });
+  server.register(fastifyMultipart, { addToBody: true })
   server.register(fastifyFormBody)
 
   server.get("/", async (request, reply) => {
