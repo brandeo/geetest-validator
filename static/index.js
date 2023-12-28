@@ -1,6 +1,7 @@
 import { publicIpv4, publicIpv6 } from "public-ip";
 import fastify from "fastify";
 import fastifyStatic from "@fastify/static";
+import fastifyFormBody from "@fastify/formbody"
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 import { spawn } from "child_process";
@@ -51,10 +52,12 @@ export async function Server() {
       );
     }
   );
+  /** 注册组件 */
   server.register(fastifyStatic, {
     root: join(__dirname),
     prefix: "/static",
   });
+  server.register(fastifyFormBody)
 
   server.get("/", async (request, reply) => {
     /** 禁止访问根页面，302重定向到/geetest */
