@@ -144,7 +144,8 @@ export async function Server() {
     if (e) {
       const token = request.query.e;
       const valid = await verifyToken(token);
-      if (valid) {
+      const data = JSON.parse(fs.readFileSync(`./data/${e}.json`, "utf8"))
+      if (valid && !data.verified) {
         /** 读取data */
         const data = JSON.parse(
           fs.readFileSync(
