@@ -2,7 +2,8 @@ import { publicIpv4, publicIpv6 } from "public-ip";
 import fastify from "fastify";
 import fastifyStatic from "@fastify/static";
 import fastifyMultipart from "@fastify/multipart";
-import fastifyFormBody from "@fastify/formbody"
+import fastifyFormBody from "@fastify/formbody";
+import websocket from "@fastify/websocket";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 import { spawn } from "child_process";
@@ -58,8 +59,18 @@ export async function Server() {
     root: join(__dirname),
     prefix: "/static",
   });
-  server.register(fastifyMultipart, { addToBody: true })
-  server.register(fastifyFormBody)
+  server.register(fastifyMultipart, { addToBody: true });
+  server.register(fastifyFormBody);
+  server.register(websocket, {
+    cors: true,
+    options: {
+      maxPayload: 1048576,
+    },
+  });
+
+  // server.get('/ws', {
+  //   websocket: true
+  // })
 
   server.get("/", async (request, reply) => {
     /** 禁止访问根页面，302重定向到/geetest */
@@ -137,7 +148,12 @@ export async function Server() {
         /** 读取data */
         const data = JSON.parse(
           fs.readFileSync(
-            path.join(__dirname, "..", "data", `${encodeURIComponent(token)}.json`),
+            path.join(
+              __dirname,
+              "..",
+              "data",
+              `${token}.json`
+            ),
             "utf8"
           )
         );
@@ -215,11 +231,11 @@ export async function Server() {
           gt: gt,
           challenge: challenge,
         },
-        e: token,
+        e: decodeURIComponent(token),
         verified: false,
       };
       fs.writeFileSync(
-        `./data/${token}.json`,
+        `./data/${decodeURIComponent(token)}.json`,
         JSON.stringify(resultdata, null, 4)
       );
       reply.type("application/json").send(resultdata);
@@ -279,7 +295,7 @@ export async function Server() {
       min = 0,
       max = _charStr.length - 1,
       _str = ""; /** 定义随机字符串 变量 */
-     /** 判断是否指定长度，否则默认长度为15 */
+    /** 判断是否指定长度，否则默认长度为15 */
     len = len || 15;
     /** 循环生成字符串 */
     for (var i = 0, index; i < len; i++) {
@@ -310,7 +326,7 @@ export async function Server() {
 
     if (!tokenData || now - tokenData.createTime > 240 * 1000) {
       /** 不存在或过期则无效 */
-      return false; 
+      return false;
     }
 
     /** 有效 */

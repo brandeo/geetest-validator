@@ -17,6 +17,7 @@
       "@fastify/static": "^6.10.2",
       "@fastify/multipart": "^8.0.0",
       "@fastify/formbody": "^7.4.0",
+      "@fastify/websocket": "^8.1.0",
       "public-ip": "^6.0.1",
       "yaml": "^2.3.3",
       "art-template": "^4.13.2",

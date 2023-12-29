@@ -73,7 +73,7 @@ window.onload = function () {
                   },
                   body: JSON.stringify({
                     verified: true,
-                    e: localStorage.getItem("e") || CreateToken(4),
+                    e: localStorage.getItem("e") || decodeURIComponent(CreateToken(4)),
                     res: { gt, challenge, validate, seccode },
                   }),
                 }).then(() => {
