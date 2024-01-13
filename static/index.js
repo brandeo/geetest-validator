@@ -22,6 +22,12 @@ export async function Server() {
       "./config/config.yaml"
     );
   }
+  try {
+    fs.accessSync("./data/")
+  } catch (checkdatadir) {
+    checkdatadir = fs.mkdirSync("./data/")
+  }
+  
   const __dirname = dirname(fileURLToPath(import.meta.url));
   let cfg = YAML.parse(
     fs.readFileSync(process.cwd() + "/config/config.yaml", "utf8")
@@ -280,7 +286,7 @@ export async function Server() {
         verified: verified,
       };
       fs.writeFileSync(filePath, JSON.stringify(updatedData, null, 4));
-      return true;
+      return "success";
     }
 
     /** 读取原文件 */
